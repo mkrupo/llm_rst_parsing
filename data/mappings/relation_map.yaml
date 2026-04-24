@@ -1,0 +1,183 @@
+native_to_coarse:
+  attribution-positive: ATTRIBUTION
+  attribution-negative: ATTRIBUTION
+  causal-cause: CAUSE_REASON
+  causal-result: RESULT
+  contingency-condition: CONDITION
+  contingency-hypothetical: CONDITION
+  adversative-contrast: CONTRAST_CONCESSION
+  adversative-concession: CONTRAST_CONCESSION
+  antithesis: CONTRAST_CONCESSION
+  context-background: BACKGROUND_CIRCUMSTANCE
+  context-circumstance: BACKGROUND_CIRCUMSTANCE
+  elaboration-additional: ELABORATION
+  elaboration-attribute: ELABORATION
+  elaboration-specification: ELABORATION
+  evaluation-comment: EVALUATION_INTERPRETATION
+  evaluation-opinion: EVALUATION_INTERPRETATION
+  interpretation: EVALUATION_INTERPRETATION
+  explanation-evidence: EVIDENCE_JUSTIFY
+  explanation-justify: EVIDENCE_JUSTIFY
+  explanation-reason: CAUSE_REASON
+  purpose-goal: PURPOSE_ENABLEMENT
+  purpose-attribute: PURPOSE_ENABLEMENT
+  manner-means: PURPOSE_ENABLEMENT
+  restatement-repetition: RESTATEMENT_SUMMARY
+  restatement-summary: RESTATEMENT_SUMMARY
+  temporal-sequence: TEMPORAL_SEQUENCE
+  temporal-same-time: TEMPORAL_SEQUENCE
+  joint-list: JOINT_LIST
+  joint-sequence: TEMPORAL_SEQUENCE
+  joint-other: JOINT_LIST
+  organization-heading: TEXTUAL_ORGANIZATION
+  organization-preparation: TEXTUAL_ORGANIZATION
+  Antithesis: CONTRAST_CONCESSION
+  Background: BACKGROUND_CIRCUMSTANCE
+  Circumstance: BACKGROUND_CIRCUMSTANCE
+  Concession: CONTRAST_CONCESSION
+  Condition: CONDITION
+  Consequence: RESULT
+  Contrast: CONTRAST_CONCESSION
+  Elaboration: ELABORATION
+  Enablement: PURPOSE_ENABLEMENT
+  Evaluation: EVALUATION_INTERPRETATION
+  Evidence: EVIDENCE_JUSTIFY
+  Interpretation: EVALUATION_INTERPRETATION
+  Justify: EVIDENCE_JUSTIFY
+  Motivation: PURPOSE_ENABLEMENT
+  Explanation: EVIDENCE_JUSTIFY
+  Non-volitional Cause: CAUSE_REASON
+  Non-volitional Result: RESULT
+  Otherwise: CONDITION
+  Purpose: PURPOSE_ENABLEMENT
+  Restatement: RESTATEMENT_SUMMARY
+  Solutionhood: PURPOSE_ENABLEMENT
+  Summary: RESTATEMENT_SUMMARY
+  Volitional Cause: CAUSE_REASON
+  Volitional Result: RESULT
+  Contrast (multi): CONTRAST_CONCESSION
+  Joint: JOINT_LIST
+  List: JOINT_LIST
+  Sequence: TEMPORAL_SEQUENCE
+  Reason: CAUSE_REASON
+  Reason-N: CAUSE_REASON
+  Evaluation-S: EVALUATION_INTERPRETATION
+  Evaluation-N: EVALUATION_INTERPRETATION
+  Unless: CONDITION
+  E-Elaboration: ELABORATION
+  Means: PURPOSE_ENABLEMENT
+  Cause: CAUSE_REASON
+  Result: RESULT
+  Preparation: TEXTUAL_ORGANIZATION
+  Conjunction: JOINT_LIST
+valid_labels:
+  erst:
+  - attribution-positive
+  - attribution-negative
+  - causal-cause
+  - causal-result
+  - contingency-condition
+  - contingency-hypothetical
+  - adversative-contrast
+  - adversative-concession
+  - antithesis
+  - context-background
+  - context-circumstance
+  - elaboration-additional
+  - elaboration-attribute
+  - elaboration-specification
+  - evaluation-comment
+  - evaluation-opinion
+  - interpretation
+  - explanation-evidence
+  - explanation-justify
+  - explanation-reason
+  - purpose-goal
+  - purpose-attribute
+  - manner-means
+  - restatement-repetition
+  - restatement-summary
+  - temporal-sequence
+  - temporal-same-time
+  - joint-list
+  - joint-sequence
+  - joint-other
+  - organization-heading
+  - organization-preparation
+  rstweb:
+  - Antithesis
+  - Background
+  - Circumstance
+  - Concession
+  - Condition
+  - Consequence
+  - Contrast
+  - Elaboration
+  - Enablement
+  - Evaluation
+  - Evidence
+  - Interpretation
+  - Justify
+  - Motivation
+  - Explanation
+  - Non-volitional Cause
+  - Non-volitional Result
+  - Otherwise
+  - Purpose
+  - Restatement
+  - Solutionhood
+  - Summary
+  - Volitional Cause
+  - Volitional Result
+  - Contrast (multi)
+  - Joint
+  - List
+  - Sequence
+  pcc:
+  - Background
+  - Antithesis
+  - Concession
+  - Evidence
+  - Reason
+  - Reason-N
+  - Justify
+  - Evaluation-S
+  - Evaluation-N
+  - Motivation
+  - Enablement
+  - Circumstance
+  - Condition
+  - Otherwise
+  - Unless
+  - Elaboration
+  - E-Elaboration
+  - Interpretation
+  - Means
+  - Cause
+  - Result
+  - Purpose
+  - Solutionhood
+  - Preparation
+  - Restatement
+  - Summary
+  - Contrast
+  - Sequence
+  - List
+  - Conjunction
+  - Joint
+coarse_labels:
+- ATTRIBUTION
+- BACKGROUND_CIRCUMSTANCE
+- CAUSE_REASON
+- RESULT
+- CONDITION
+- CONTRAST_CONCESSION
+- ELABORATION
+- EVALUATION_INTERPRETATION
+- EVIDENCE_JUSTIFY
+- PURPOSE_ENABLEMENT
+- RESTATEMENT_SUMMARY
+- TEMPORAL_SEQUENCE
+- JOINT_LIST
+- TEXTUAL_ORGANIZATION
+- OTHER

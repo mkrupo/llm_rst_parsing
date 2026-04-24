@@ -1,0 +1,12 @@
+models:
+  # Example models configuration for the LLM annotation benchmark.  You can
+  # define multiple models here and reference them in your experiment
+  # configuration.  Each model entry should specify a unique name, a
+  # provider (currently only 'hf' for HuggingFace is supported), and the
+  # model identifier as understood by the provider.
+  - name: local_model_a
+    provider: hf
+    model_id: meta-llama/Llama-3.2-3B-Instruct
+  - name: local_model_b
+    provider: hf
+    model_id: Qwen/Qwen2.5-3B-Instruct

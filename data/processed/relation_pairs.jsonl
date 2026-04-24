@@ -1,0 +1,1 @@
+{"item_id":"demo1","source":"demo","genre":"news","doc_id":"demo_doc","left":"The company announced the merger","right":"because it wanted to expand into Asia","context_before":"","context_after":"","gold_native":"causal-cause","gold_standard":"erst","gold_coarse":"CAUSE_REASON","nuclearity":"NS","split":"test"}

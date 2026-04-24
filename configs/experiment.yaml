@@ -1,0 +1,51 @@
+data:
+  # Path to the processed input dataset of EDU pairs.  You should generate
+  # this file using the build_items script.  Each line must be a JSON
+  # object conforming to the schema described in the paper.
+  input_jsonl: data/processed/relation_pairs.jsonl
+  # Few‑shot examples for the 'few' condition.  Balance examples across
+  # coarse relation families and standards if possible.
+  fewshot_jsonl: data/processed/fewshot_examples.jsonl
+  # Directory where raw and parsed predictions will be written.  The
+  # run_llm_annotation script will create separate files for each model,
+  # standard, formulation and shot.
+  output_dir: results/predictions
+
+models:
+  # This section lists the models to be used in the benchmark.  Each
+  # entry requires a unique name and a HuggingFace model identifier.  You
+  # can add additional models here.  If a model cannot be loaded, the
+  # script will fall back to a dummy generator.
+  - name: local_model_a
+    provider: hf
+    model_id: meta-llama/Llama-3.2-3B-Instruct
+  - name: local_model_b
+    provider: hf
+    model_id: Qwen/Qwen2.5-3B-Instruct
+
+decoding:
+  # Decoding parameters for zero‑shot prompts.  Temperature 0.0 results
+  # in deterministic generation.  n_repeats controls how many times
+  # each prompt will be sampled (use 1 for efficiency in zero‑shot).
+  zero_shot:
+    temperature: 0.0
+    n_repeats: 1
+  # Decoding parameters for the self‑consistency (few‑shot) prompts.  A
+  # higher temperature encourages the model to produce diverse outputs
+  # across repeats.  n_repeats controls the number of samples per prompt.
+  self_consistency:
+    temperature: 0.7
+    n_repeats: 5
+  # Maximum number of tokens the model is allowed to generate beyond the
+  # input prompt.  Increase if your model tends to produce long outputs.
+  max_new_tokens: 512
+
+conditions:
+  # Annotation standards to test.  Choose from 'erst', 'rstweb', 'pcc'.
+  standards: [erst, rstweb, pcc]
+  # Instruction formulations: 'as_written' uses the original guideline
+  # language; 'normalized' uses harmonised wording across standards.
+  formulations: [as_written, normalized]
+  # Shot settings: 'zero' uses only the template; 'few' appends few‑shot
+  # examples from the file defined above.
+  shots: [zero, few]

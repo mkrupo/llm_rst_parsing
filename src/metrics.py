@@ -18,13 +18,17 @@ from collections import Counter, defaultdict
 from itertools import combinations
 from typing import Dict, List, Tuple, Any
 
-import numpy as np
-from scipy.spatial.distance import jensenshannon
-from sklearn.metrics import accuracy_score, f1_score, confusion_matrix
+
+def parsed_fields(record: Dict[str, Any]) -> Dict[str, Any]:
+    """Return parsed prediction fields, ignoring missing or malformed values."""
+    parsed = record.get("parsed")
+    return parsed if isinstance(parsed, dict) else {}
 
 
 def distribution(labels: List[str], label_space: List[str]) -> np.ndarray:
     """Compute the empirical distribution over a finite label space."""
+    import numpy as np
+
     c = Counter(labels)
     arr = np.array([c.get(x, 0) for x in label_space], dtype=float)
     if arr.sum() == 0:
@@ -35,6 +39,8 @@ def distribution(labels: List[str], label_space: List[str]) -> np.ndarray:
 
 def jsd(pred_labels: List[str], gold_labels: List[str], label_space: List[str]) -> float:
     """Compute the Jensen–Shannon divergence between two distributions."""
+    from scipy.spatial.distance import jensenshannon
+
     p = distribution(pred_labels, label_space)
     q = distribution(gold_labels, label_space)
     return float(jensenshannon(p, q, base=2.0) ** 2)
@@ -42,6 +48,8 @@ def jsd(pred_labels: List[str], gold_labels: List[str], label_space: List[str]) 
 
 def classification_report_rows(gold: List[str], pred: List[str], labels: List[str]) -> Dict[str, Any]:
     """Compute basic classification statistics (accuracy, macro F1, JSD and confusion)."""
+    from sklearn.metrics import accuracy_score, confusion_matrix, f1_score
+
     return {
         "accuracy": float(accuracy_score(gold, pred)),
         "macro_f1": float(f1_score(gold, pred, labels=labels, average="macro", zero_division=0)),
@@ -65,29 +73,26 @@ def native_validity(records: List[Dict[str, Any]], valid_labels: Dict[str, List[
     float
         Ratio of valid predictions.
     """
-    total = 0
     valid = 0
     for rec in records:
-        parsed = rec.get("parsed") or {}
-        native = parsed.get("native_label")
+        native = parsed_fields(rec).get("native_label")
         standard = rec.get("standard")
-        if native is not None:
-            total += 1
-            if standard in valid_labels and native in valid_labels[standard]:
-                valid += 1
-    return valid / total if total else 0.0
+        if standard in valid_labels and native in valid_labels[standard]:
+            valid += 1
+    return valid / len(records) if records else 0.0
 
 
 def native_accuracy(records: List[Dict[str, Any]]) -> float:
     """Compute accuracy on the native label when gold_native is available."""
+    from sklearn.metrics import accuracy_score
+
     gold = []
     pred = []
     for rec in records:
         g = rec.get("gold_native")
         if g is not None:
-            parsed = rec.get("parsed") or {}
             gold.append(g)
-            pred.append(parsed.get("native_label"))
+            pred.append(parsed_fields(rec).get("native_label"))
     if not gold:
         return float("nan")
     return accuracy_score(gold, pred)
@@ -95,13 +100,14 @@ def native_accuracy(records: List[Dict[str, Any]]) -> float:
 
 def coarse_accuracy_macro_f1(records: List[Dict[str, Any]], label_space: List[str]) -> Tuple[float, float]:
     """Compute coarse label accuracy and macro F1."""
+    from sklearn.metrics import accuracy_score, f1_score
+
     gold = []
     pred = []
     for rec in records:
         if rec.get("gold_coarse") is not None:
             gold.append(rec["gold_coarse"])
-            parsed = rec.get("parsed") or {}
-            pred.append(parsed.get("coarse_label"))
+            pred.append(parsed_fields(rec).get("coarse_label"))
     if not gold:
         return float("nan"), float("nan")
     accuracy = accuracy_score(gold, pred)
@@ -120,8 +126,7 @@ def self_consistency(records: List[Dict[str, Any]]) -> float:
     groups: Dict[Tuple[str, str, str, str, str], List[str]] = defaultdict(list)
     for rec in records:
         key = (rec.get("item_id"), rec.get("model"), rec.get("standard"), rec.get("formulation"), rec.get("shot"))
-        parsed = rec.get("parsed") or {}
-        coarse = parsed.get("coarse_label")
+        coarse = parsed_fields(rec).get("coarse_label")
         if coarse is not None:
             groups[key].append(coarse)
     scores = []
@@ -136,7 +141,11 @@ def self_consistency(records: List[Dict[str, Any]]) -> float:
                 agree_pairs += 1
         if total_pairs:
             scores.append(agree_pairs / total_pairs)
-    return float(np.mean(scores)) if scores else float("nan")
+    if scores:
+        import numpy as np
+
+        return float(np.mean(scores))
+    return float("nan")
 
 
 def cross_model_consistency(records: List[Dict[str, Any]]) -> float:
@@ -153,8 +162,7 @@ def cross_model_consistency(records: List[Dict[str, Any]]) -> float:
     for rec in records:
         key = (rec.get("item_id"), rec.get("standard"), rec.get("formulation"), rec.get("shot"))
         model = rec.get("model")
-        parsed = rec.get("parsed") or {}
-        coarse = parsed.get("coarse_label")
+        coarse = parsed_fields(rec).get("coarse_label")
         if coarse is not None and model is not None:
             agg[key][model].append(coarse)
     # For each key, compute majority coarse for each model
@@ -185,8 +193,7 @@ def distributional_alignment(records: List[Dict[str, Any]], label_space: List[st
     for rec in records:
         if rec.get("gold_coarse") is not None:
             gold.append(rec["gold_coarse"])
-            parsed = rec.get("parsed") or {}
-            pred.append(parsed.get("coarse_label"))
+            pred.append(parsed_fields(rec).get("coarse_label"))
     if not gold:
         return float("nan")
     return jsd(pred, gold, label_space)
@@ -269,9 +276,10 @@ def compute_and_save_metrics(prediction_dir: pathlib.Path, mapping_path: pathlib
         for rec in sub:
             if rec.get("gold_coarse") is not None:
                 gold.append(rec["gold_coarse"])
-                parsed = rec.get("parsed") or {}
-                pred.append(parsed.get("coarse_label"))
+                pred.append(parsed_fields(rec).get("coarse_label"))
         if gold:
+            from sklearn.metrics import confusion_matrix
+
             cm = confusion_matrix(gold, pred, labels=coarse_labels).tolist()
             # Write as JSON for ease of later plotting
             with open(confusion_dir / f"confusion_{standard}.json", "w", encoding="utf-8") as f:

@@ -20,7 +20,16 @@ from __future__ import annotations
 import argparse
 import json
 import pathlib
-from typing import Any, Dict, Iterable, Optional, Tuple
+from typing import Any, Dict, Optional
+
+
+def _loads_json_object(text: str) -> Optional[Dict[str, Any]]:
+    """Parse ``text`` as JSON and return it only when it is an object."""
+    try:
+        parsed = json.loads(text)
+    except json.JSONDecodeError:
+        return None
+    return parsed if isinstance(parsed, dict) else None
 
 
 def safe_parse_json(text: str) -> Optional[Dict[str, Any]]:
@@ -45,22 +54,17 @@ def safe_parse_json(text: str) -> Optional[Dict[str, Any]]:
     if not text:
         return None
     text = text.strip()
-    # Quick check for plain JSON
-    try:
-        return json.loads(text)
-    except Exception:
-        pass
+    parsed = _loads_json_object(text)
+    if parsed is not None:
+        return parsed
+
     # Fallback: search for JSON substring
     try:
         start = text.index("{")
         end = text.rindex("}") + 1
     except ValueError:
         return None
-    substring = text[start:end]
-    try:
-        return json.loads(substring)
-    except Exception:
-        return None
+    return _loads_json_object(text[start:end])
 
 
 def process_prediction_files(input_dir: pathlib.Path, output_dir: pathlib.Path) -> None:

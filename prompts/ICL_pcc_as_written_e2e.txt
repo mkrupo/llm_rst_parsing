@@ -1,15 +1,15 @@
-Based on the definitions, analyze the target text (tsv-formatted) and build a bracketed discourse tree end-to-end. Refer to text fragments by their index. Ensure the correct formatting of the tree.
+Based on the definitions, analyze the target text (tsv-formatted) and build a bracketed discourse tree end-to-end. Refer to text fragments by their index. Ensure the correct formatting of the tree. Prefer semantically specific relations to semantically generic relations.
 
 ### Attribution
 **Definition:** The S is the source of the attribution (a clause containing a reporting verb, or a phrase beginning with according to), and the N is the content of the reported message (which must be in a separate clause). The Attribution relation is also used with cognitive predicates, to include feelings, thoughts, hopes, etc.
-- **Example:** [The legendary GM chairman declared] [that his company would make “a car for every purse and purpose.”] (wsj_1377) [The shares represented 66% of his Dun & Bradstreet holdings,] [according to the company.] (wsj_1157)
+- **Example:** (SN-Attribution (text "The legendary GM chairman declared") (text "that his company would make “a car for every purse and purpose.”")) (wsj_1377) (NS-Attribution (text "The shares represented 66% of his Dun & Bradstreet holdings,") (text "according to the company.")) (wsj_1157)
 - **Remark:** Instances of reported speech, both direct and indirect, should be marked for the rhetorical relation of ATTRIBUTION.
 
 ### Background
 - **N/S:** Understanding S makes it easier for R to understand the content of N; without the background information in S, it would be difficult to comprehend N. In a text, S mostly but not always precedes N. A Background S at the beginning of the text often serves to introduce the topic of the text.
 - **Effect:** R’s ability to comprehend N is increased.
 - **Typical connectives:** Rarely signalled by connectives.
-- **Example:** [Until 1984, Burkina Faso was called Obervolta.]S [According to an EMNID poll, many Europeans today believe that they are two different countries.]N
+- **Example:** (SN-Background (text "Until 1984, Burkina Faso was called Obervolta.") (text "According to an EMNID poll, many Europeans today believe that they are two different countries."))
 - **Remark:** This relation only rarely holds between two EDUs; mostly it will connect larger segments. Many editorials start with a Background S, which serves as the starting point for W’s subsequent assessment.
 
 ### Antithesis
@@ -18,7 +18,7 @@ Based on the definitions, analyze the target text (tsv-formatted) and build a br
 - **N/S:** The contents of N and S are not compatible – often on the level of their evaluation. Due to the incompatibility, one cannot have equal regard for N and S. In a text, S usually precedes N.
 - **Effect:** R’s positive regard for N is increased.
 - **Typical connectives:** but; neg - rather; neg - instead; ...
-- **Example:** Attempt of a city to sell off real estate [At one point they seemed to have succeeded.]S [But the buyer didn’t pay.]N (maz-6193, PCC) [It was not the man who received negative votes]S [but his job, which turns him into a supporter for the bombing test range.]N (maz-17300, PCC)
+- **Example:** Attempt of a city to sell off real estate (SN-Antithesis (text "At one point they seemed to have succeeded.") (text "But the buyer didn’t pay.")) (maz-6193, PCC) (SN-Antithesis (text "It was not the man who received negative votes") (text "but his job, which turns him into a supporter for the bombing test range.")) (maz-17300, PCC)
 - **Remark:** Similar relations are Concession and multinuclear Contrast; see also Section 4.6. A subgroup of Antithesis is cases where N serves to correct an assumption stated in S.
 
 ### Concession
@@ -27,7 +27,7 @@ Based on the definitions, analyze the target text (tsv-formatted) and build a br
 - **N/S:** W concedes S and implicitly confirms that S and N are usually not compatible; in the current instance, however, they are compatible, and N is being emphasized.
 - **Effect:** R’s positive regard for N is increased.
 - **Typical connectives:** although; but; still; despite; ...
-- **Example:** [Sanitary facilities nowadays are a standard on big campgrounds.]S [But Radewege has a hard time with upgrading to such standards.]N (maz-6488, PCC)
+- **Example:** (SN-Concession (text "Sanitary facilities nowadays are a standard on big campgrounds.") (text "But Radewege has a hard time with upgrading to such standards.")) (maz-6488, PCC)
 
 ### Evidence
 - **N:** A subjective statement/thesis/claim, which R might not accept or might not regard as sufficiently important or positive.
@@ -35,7 +35,7 @@ Based on the definitions, analyze the target text (tsv-formatted) and build a br
 - **N/S:** Understanding S makes it easier for R to accept N, or to share the particular viewpoint of W.
 - **Effect:** R’s belief in N is increased.
 - **Typical connectives:** Causal connectives.
-- **Example:** Debate about having two subjects 'Religion' and 'LER' at school [And now even our state government seems determined to remove this apparent equality between the two subjects.]N [Stolpe, Reiche, and others do say Yes to the possible compromise offered by the Karlsruhe court, but they also decree: There cannot be any voluntary subject area LER/Religion.]S (maz-6159, PCC)
+- **Example:** Debate about having two subjects 'Religion' and 'LER' at school (NS-Evidence (text "And now even our state government seems determined to remove this apparent equality between the two subjects.") (text "Stolpe, Reiche, and others do say Yes to the possible compromise offered by the Karlsruhe court, but they also decree: There cannot be any voluntary subject area LER/Religion.")) (maz-6159, PCC)
 - **Remark:** Evidence often connects a larger S segment to a shorter N (the thesis).
 
 ### Reason
@@ -44,7 +44,7 @@ Based on the definitions, analyze the target text (tsv-formatted) and build a br
 - **N/S:** Understanding S makes it easier for R to accept N, or to share the particular viewpoint of W.
 - **Effect:** R’s belief in N is increased.
 - **Typical connectives:** Causal connectives.
-- **Example:** [With each new day of air raids, the military operations of the U.S. lose more and more credibility.]N [By means of comprehensive area-wide destruction you can’t hit the Taliban, nor can you eliminate bin Laden.]S (maz-5701, PCC)
+- **Example:** (NS-Reason (text "With each new day of air raids, the military operations of the U.S. lose more and more credibility.") (text "By means of comprehensive area-wide destruction you can’t hit the Taliban, nor can you eliminate bin Laden.")) (maz-5701, PCC)
 - **Remark:** Reason is more specific than Evidence. The difference lies in whether S is being presented by W as “objective” (Evidence) or also constitutes a subjective statement itself (Reason).
 
 ### Reason-N
@@ -61,7 +61,7 @@ Based on the definitions, analyze the target text (tsv-formatted) and build a br
 - **N/S:** Understanding S makes it easier for R to accept N, or to share the particular viewpoint of W.
 - **Effect:** R’s readiness to accept W’s right to present N is increased.
 - **Typical connectives:** Causal connectives.
-- **Example:** [I’ll never eat this dish.]N [I’m a vegetarian.]S
+- **Example:** (NS-Justify (text "I’ll never eat this dish.") (text "I’m a vegetarian."))
 
 ### Evaluation-S
 - **N:** Description of a state of affairs, or a subjective statement (but not from W’s perspective).
@@ -69,7 +69,7 @@ Based on the definitions, analyze the target text (tsv-formatted) and build a br
 - **N/S:** S evaluates N.
 - **Effect:** R recognizes that S assesses N and recognizes the value it assigns.
 - **Typical connectives:** Rarely signalled by connectives.
-- **Example:** [Its past seemed to shadow the big hotel like a curse.]S [For many years the Potsdam local court had tried to find a buyer, without success.]N (maz-6193, PCC)
+- **Example:** (SN-Evaluation (text "Its past seemed to shadow the big hotel like a curse.") (text "For many years the Potsdam local court had tried to find a buyer, without success.")) (maz-6193, PCC)
 - **Remark:** Usually, the 'evaluating' segment follows the 'evaluated' one. But sometimes the order is the opposite, as in the example.
 
 ### Evaluation-N
@@ -85,7 +85,7 @@ Based on the definitions, analyze the target text (tsv-formatted) and build a br
 - **N/S:** S presents a reason for performing the action described in N.
 - **Effect:** R’s desire to perform the action in N is increased.
 - **Typical connectives:** Causal connectives.
-- **Example:** [Running the Olympic Games is a win-win situation for any city.]S [Berlin must now apply for the 2026 games!]N
+- **Example:** (SN-Motivation (text "Running the Olympic Games is a win-win situation for any city.") (text "Berlin must now apply for the 2026 games!"))
 - **Remark:** In the genre of editorials, this relation is rare. Sometimes W metaphorically encourages all Rs to do a certain action, as in the example given here.
 
 ### Enablement
@@ -93,7 +93,7 @@ Based on the definitions, analyze the target text (tsv-formatted) and build a br
 - **N/S:** Comprehending S makes it easier for R to perform the action described in N.
 - **Effect:** R’s potential ability to perform the action in N increases.
 - **Typical connectives:**
-- **Example:** [Replace the spark plugs.]N [A square key wrench can be found right under the cap.]S
+- **Example:** (NS-Enablement (text "Replace the spark plugs.") (text "A square key wrench can be found right under the cap."))
 - **Remark:** In the genre of editorials, this relation is rare.
 
 ## 4.3 Primarily semantic relations
@@ -102,14 +102,14 @@ Based on the definitions, analyze the target text (tsv-formatted) and build a br
 - **N/S:** S characterizes a framework in which N is to be interpreted, such as its temporal or locative position.
 - **Effect:** R recognizes that S provides the framework for interpreting N.
 - **Typical connectives:** as; when; while; ... for a temporal frame.
-- **Example:** [When Veag came under pressure because of the deregulation of the electricity market,]S [they compensated for this by squeezing their suppliers.]N (maz-5297, PCC)
+- **Example:** (SN-Circumstance (text "When Veag came under pressure because of the deregulation of the electricity market,") (text "they compensated for this by squeezing their suppliers.")) (maz-5297, PCC)
 
 ### Condition
 - **S:** A hypothetical, future, or in other ways unreal situation.
 - **N/S:** The realization of N depends on the realization of S.
 - **Effect:** R recognizes how the realization of N depends on the realization of S.
 - **Typical connectives:** if .. then; in case; ...
-- **Example:** [When more and more communities are in financial trouble,]S [regularly replacing the school textbooks becomes just impossible.]N (maz-00002, PCC) [If the sanitary facilities are still not available in the coming season,]S [Radewege is in danger of losing the competition for attracting boats to the campground.]N (maz-6488, PCC)
+- **Example:** (SN-Condition (text "When more and more communities are in financial trouble,") (text "regularly replacing the school textbooks becomes just impossible.")) (maz-00002, PCC) (SN-Condition (text "If the sanitary facilities are still not available in the coming season,") (text "Radewege is in danger of losing the competition for attracting boats to the campground.")) (maz-6488, PCC)
 
 ### Otherwise
 - **N:** A hypothetical, future, or in other ways unreal situation.
@@ -117,7 +117,7 @@ Based on the definitions, analyze the target text (tsv-formatted) and build a br
 - **N/S:** The realization of N impedes the realization of S.
 - **Effect:** R recognizes the dependency relation of prevention between the realization of N and the realization of S.
 - **Typical connectives:** otherwise; ...
-- **Example:** [The city would be smart not to respond to this moral imperative.]N [Otherwise it would have to install speed bumps in front of every single school.]S (maz-5709, PCC) [The community council should revoke its decision,]N [before citizens start buying torches.]S (maz-15609, PCC)
+- **Example:** (NS-Otherwise (text "The city would be smart not to respond to this moral imperative.") (text "Otherwise it would have to install speed bumps in front of every single school.")) (maz-5709, PCC) (NS-Otherwise (text "The community council should revoke its decision,") (text "before citizens start buying torches.")) (maz-15609, PCC)
 
 ### Unless
 - **N:** A hypothetical, future, or in other ways unrealized situation.
@@ -125,26 +125,26 @@ Based on the definitions, analyze the target text (tsv-formatted) and build a br
 - **N/S:** S determines the realization of N: N is only being realized if S is not being realized.
 - **Effect:** R recognizes that N is realized provided that S is not realized.
 - **Typical connectives:** unless; ...
-- **Example:** [Tomorrow the satellite will fall into the Pacific Ocean.]N [Unless it burns up upon entering the earth's atmosphere, after all.]S
+- **Example:** (NS-Unless (text "Tomorrow the satellite will fall into the Pacific Ocean.") (text "Unless it burns up upon entering the earth's atmosphere, after all."))
 
 ### Elaboration
 - **N/S:** S provides details or more information on the state of affairs described in N (but not on a single entity mentioned in N; see E-Elaboration below). N precedes S in the text. Typical relations between N and S are set::element, whole::part, abstraction::instance, procedure::step.
 - **Effect:** R recognizes S as providing additional detail for the state of affairs in N. R identifies the element of subject matter for which detail is provided.
 - **Typical connectives:** in particular; for example; ...
-- **Example:** [Diepensee will relocate.]N [No question about that.]S (maz-6993, PCC)
+- **Example:** (NS-Elaboration (text "Diepensee will relocate.") (text "No question about that.")) (maz-6993, PCC)
 
 ### E-Elaboration
 - **N/S:** S provides details or more information on a single entity mentioned in N. N precedes S in the text.
 - **Effect:** R recognizes S as providing additional detail for an entity in N. R identifies the element of subject matter for which detail is provided.
 - **Typical connectives:** Rarely signalled by connectives.
-- **Example:** [Today thousands of visitors want to sense the atmosphere of a historical classroom,]N [as it exists only in very few places in Germany.]S (maz-6728, PCC)
+- **Example:** (NS-E-Elaboration (text "Today thousands of visitors want to sense the atmosphere of a historical classroom,") (text "as it exists only in very few places in Germany.")) (maz-6728, PCC)
 - **Remark:** In the example, the as-clause (S) does not provide information on the ‘sense’ activity but on the ‘classroom’, i.e., an entity mentioned in N.
 
 ### Interpretation
 - **N/S:** S shifts the content of N to a different conceptual frame. This does not imply an evaluation of N (or the evaluation is of only secondary importance). N precedes S in the text.
 - **Effect:** R recognizes that S relates N to a framework of ideas not involved in the knowledge presented in N itself.
 - **Typical connectives:** thus; ...
-- **Example:** [Now for the first time we bought a Cadillac.]N [That probably makes us part of the bourgeoisie.]S
+- **Example:** (NS-Interpretation (text "Now for the first time we bought a Cadillac.") (text "That probably makes us part of the bourgeoisie."))
 - **Remark:** Whenever S primarily provides an assessment (on the positive/negative scale) of N, Evaluation is to be used, rather than Interpretation.
 
 ### Means
@@ -152,7 +152,7 @@ Based on the definitions, analyze the target text (tsv-formatted) and build a br
 - **N/S:** S provides information that makes the realization/execution of N more probable or simple (e.g., an instrument).
 - **Effect:** R recognizes that the method or instrument in S tends to make the realization of N more likely.
 - **Typical connectives:** thus; ...
-- **Example:** [In August, Berliners always enjoy travelling to Lichtenrade.]N [To that end, they usually take the S25 train.]S [The chairman of the party made sure to be on bad terms with two mayors]S [and thus will lose credibility and standing.]N (maz-18160, PCC)
+- **Example:** (NS-Means (text "In August, Berliners always enjoy travelling to Lichtenrade.") (text "To that end, they usually take the S25 train.")) (SN-Means (text "The chairman of the party made sure to be on bad terms with two mayors") (text "and thus will lose credibility and standing.")) (maz-18160, PCC)
 
 ### Cause
 - **N:** A state or event in the world.
@@ -160,7 +160,7 @@ Based on the definitions, analyze the target text (tsv-formatted) and build a br
 - **N/S:** The state/event in N is being caused by the state/event in S.
 - **Effect:** R recognizes S as a cause of N.
 - **Typical connectives:** because; since; therefore; ...
-- **Example:** Unexpected press report on relocating the village of Diepensee. [Mayer Jochen Wagner reacted with surprise, too.]N [After all, just on Monday the community council had agreed to expand the village of Diepensee.]S (maz-6993, PCC)
+- **Example:** Unexpected press report on relocating the village of Diepensee. (NS-Cause (text "Mayer Jochen Wagner reacted with surprise, too.") (text "After all, just on Monday the community council had agreed to expand the village of Diepensee.")) (maz-6993, PCC)
 
 ### Result
 - **N:** A state or event in the world.
@@ -176,7 +176,7 @@ Based on the definitions, analyze the target text (tsv-formatted) and build a br
 - **N/S:** S is being realized through the realization/execution of N.
 - **Effect:** R recognizes that the activity in N is initiated in order to realize S.
 - **Typical connectives:** in order to; to; ...
-- **Example:** [In order to protect their troops,]S [the U.S. do not comment on news reports on the start of a ground operation in Afghanistan.]N (maz-5701, PCC)
+- **Example:** (SN-Purpose (text "In order to protect their troops,") (text "the U.S. do not comment on news reports on the start of a ground operation in Afghanistan.")) (maz-5701, PCC)
 - **Remark:** There is a causal relationship in a wide sense. The difference to the relations Cause/Result is that with Purpose, S is clearly marked as hypothetical/unrealized, and represents the intention or goal of the acting person.
 
 ### Solutionhood
@@ -184,7 +184,7 @@ Based on the definitions, analyze the target text (tsv-formatted) and build a br
 - **N/S:** The content of N can be regarded as a solution to the problem in N. N usually precedes S in the text.
 - **Effect:** R recognizes N as a solution to the problem presented in S.
 - **Typical connectives:** Rarely signalled by connectives.
-- **Example:** [With the anti-smoker regulations being passed, many pubs will be caught in a trap.]S [They should start looking into possibilities for having separate rooms.]N
+- **Example:** (SN-Solutionhood (text "With the anti-smoker regulations being passed, many pubs will be caught in a trap.") (text "They should start looking into possibilities for having separate rooms."))
 
 4.4 Textual relations
 The following three relations primarily serve to organize the text and its under-
@@ -195,14 +195,14 @@ the pragmatic (change the attitude of readers) group.
 - **N/S:** S precedes N in the text. S orients R toward the topic of N.
 - **Effect:** R is more ready, interested or oriented for reading N.
 - **Typical connectives:** Rarely signalled by connectives; sometimes by a colon.
-- **Example:** [One thing is evident:]S [With each day of air raids, the military operations of the U.S. lose more and more credibility.]N (maz-5701, PCC)
+- **Example:** (SN-Preparation (text "One thing is evident:") (text "With each day of air raids, the military operations of the U.S. lose more and more credibility.")) (maz-5701, PCC)
 - **Remark:** This relation is to be used when S does not serve any stronger purpose than setting the topic for N, or when it consists of an introductory formula. S should contain only minimal information on its own.
 
 ### Restatement
 - **N/S:** N precedes S in the text. S repeats the information given in N, using a different wording. N and S are of roughly equal size.
 - **Effect:** R recognizes S as a restatement of N.
 - **Typical connectives:** in other words; ...
-- **Example:** [The mayor gave all the information to the councillors,]N [kind of filling them in completely.]S
+- **Example:** (NS-Restatement (text "The mayor gave all the information to the councillors,") (text "kind of filling them in completely."))
 
 ### Summary
 - **N:** N consists of more than one EDU.
@@ -213,10 +213,11 @@ the pragmatic (change the attitude of readers) group.
 4.5 Multinuclear relations
 Among the multinuclear relations, Sequence belongs to the semantic type, while
 the others can work as semantic, pragmatic or textual, depending on context.
+Allowed to have more than one child if joining several same-level text units.
 
 ### Same-unit
-**N:**  Two discontinuous text fragments that are really a single EDU, but which are broken up by an embedded unit. 
-**Example:** [[The yen’s softness,] [she says,]]N [apparently stems from Japanese investors’ interest]N
+**N:**  Two discontinuous text fragments that are really a single EDU, but which are broken up by an embedded unit, often an apposition. 
+**Example:** (NN-Same-unit (NS-Attribution (text "The yen’s softness,") (text "she says,")) (text "apparently stems from Japanese investors’ interest"))
 - **Remark:** A pseudo-relation. Examples of embedded units that can break up other EDUs include: relative clauses, other nominal postmodifiers, parentheticals, participial clauses, etc.
 
 ### Contrast
@@ -224,34 +225,33 @@ the others can work as semantic, pragmatic or textual, depending on context.
 - **Effect:** R recognizes the comparability and the difference(s) yielded by
 the comparison being made.
 - **Typical connectives:** on the other hand; yet; but; ...
-- **Example:** [My first car was small.]N [The second was already a sizable limousine.]N
+- **Example:** (NN-Contrast (text "My first car was small.") (text "The second was already a sizable limousine."))
 
 ### Sequence
 - **N:** The nuclei describe states of affairs that occur in a particular temporal order.
 - **Effect:** R recognizes the succession relationships among the nuclei.
 - **Typical connectives:** then; before; afterwards; ...
-- **Example:** [At nine o’clock the teacher entered the classroom.]N [Five minutes later she announced that a test will be written.]N
+- **Example:** (NN-Sequence (text "At nine o’clock the teacher entered the classroom.") (text "Five minutes later she announced that a test will be written."))
 - **Remark:** The states of affairs can be presented in their actual temporal order (“afterwards”) or in the opposite one (“before that”).
 
 ### List
 - **N:** The nuclei provide information that can be recognized as related, enumerating. They all contribute to the text function in the same way.
 - **Effect:** R recognizes the comparability of linked items.
 - **Typical connectives:** Comma, enumeration, ...
-- **Example:** What I did yesterday: [Cook dinner,]N [look after the kids,]N [clean the bathromm.]N
+- **Example:** What I did yesterday: (NN-List (text "Cook dinner,") (text "look after the kids,") (text "clean the bathromm."))
 - **Remark:** See Section 4.6 for hints on handling elliptical contexts (as in the example).
 
 ### Conjunction
 - **N:** The nuclei provide information that can be recognized as related, enumerating. They all contribute to the text function in the same way, and they are linked by coordinating conjunctions. 
 - **Effect:** R recognizes that the linked items are conjoined.
 - **Typical connectives:** and; or; ...
-- **Example:** [Should the aerial warfare have been meant merely as a menace,]S [it would lose its legitimacy at the latest when winter kicks in and triggers the inevitable human disaster.]N [And the U.S. would lose their backing in Western Europe.]N ]N (maz-2318, PCC) 
+- **Example:** (SN-Condition (text "Should the aerial warfare have been meant merely as a menace,") (NN-Conjunction (text "it would lose its legitimacy at the latest when winter kicks in and triggers the inevitable human disaster.") (text "And the U.S. would lose their backing in Western Europe."))) (maz-2318, PCC) 
 - **Remark:** The functions of List and Conjunction are identical. When the surface condition for Conjunction holds, this relation is to be used.
 
 ### Joint
 - **N:** The nuclei provide different kinds of information, which are not of the same type; yet they are not in a clearly identifiable semantic or pragmatic relation, nor do they form an enumeration. Still, there is a coherent link, as they contribute in similar ways to the overall text function.
 - **Effect:** R recognizes that each nucleus contributes its own message, which however serve the same overall text purpose.
 - **Typical connectives:** Additive connectives such as in addition; also.
-- **Example:** See Section 6.
 - **Remark:** Joint is to be used when a multinuclear relation is needed (from the text-global perspective) but none of the specific relations are applicable.
 
 bracketed tree example:
@@ -259,8 +259,9 @@ bracketed tree example:
 (SN-Evaluation
         (text 1)
         (NS-Evaluation
-          (SN-Cause (text 2) (NN-Joint (text 3) (text 4)))
-          (NS-Cause (text 5) (text 6))))
+          (SN-Cause (text 2) (NN-Joint (text 3) (text 4) (text 5)))
+          (NS-Cause (text 6) (text 7)))
+)
 ```
 
 ```tsv

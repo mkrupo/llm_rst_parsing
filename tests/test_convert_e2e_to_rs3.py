@@ -10,6 +10,9 @@ from src.convert_e2e_to_rs3 import (
 )
 
 
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+
+
 class TreeCleanupTests(unittest.TestCase):
     def test_keeps_plain_tree_and_strips_outer_whitespace(self):
         self.assertEqual(strip_tree_fence("  (text 1)\n"), "(text 1)")
@@ -20,6 +23,17 @@ class TreeCleanupTests(unittest.TestCase):
         self.assertEqual(strip_tree_fence(f"```text\n{tree}\n```"), tree)
         prose = f"Here is the tree:\n{tree}"
         self.assertEqual(strip_tree_fence(prose), prose)
+
+    def test_extracts_final_tree_from_real_analysis_response(self):
+        response = (ROOT / "tests" / "fixtures" / "model_output_with_analysis.txt").read_text(
+            encoding="utf-8"
+        )
+
+        extracted = strip_tree_fence(response)
+
+        self.assertTrue(extracted.startswith("(NN-List"))
+        self.assertIn("(text 58)", extracted)
+        self.assertNotIn("world-famous discourse analysis", extracted)
 
     def test_sanitizes_document_ids_without_allowing_paths(self):
         self.assertEqual(safe_doc_filename("gum/news 1"), "gum_news_1")

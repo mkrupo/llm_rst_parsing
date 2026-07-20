@@ -17,6 +17,9 @@ _OUTER_FENCE = re.compile(
     r"\A```(?:text)?[ \t]*\n(?P<body>.*)\n```[ \t]*\Z",
     re.DOTALL | re.IGNORECASE,
 )
+_FENCED_BLOCK = re.compile(
+    r"```(?:text)?[ \t]*\n(?P<body>.*?)\n```", re.DOTALL | re.IGNORECASE
+)
 _UNSAFE_FILENAME = re.compile(r"[^A-Za-z0-9._-]+")
 
 
@@ -30,10 +33,15 @@ class ConversionSummary:
 
 
 def strip_tree_fence(raw_tree: str) -> str:
-    """Trim whitespace and remove one surrounding Markdown fence, if present."""
+    """Extract a compact tree from bare, fenced, or analysis-wrapped output."""
     stripped = raw_tree.strip()
     match = _OUTER_FENCE.fullmatch(stripped)
-    return match.group("body").strip() if match else stripped
+    if match:
+        return match.group("body").strip()
+    fenced_blocks = list(_FENCED_BLOCK.finditer(stripped))
+    if fenced_blocks:
+        return fenced_blocks[-1].group("body").strip()
+    return stripped
 
 
 def safe_doc_filename(doc_id: str) -> str:

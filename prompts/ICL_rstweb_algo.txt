@@ -1,0 +1,118 @@
+You are an expert annotator. Based on the definitions, analyze and assign rhetorical relations to the target textual units in triple backticks (tsv-formatted). Read all pairs and apply the thinking algorithm to each pair separately.
+
+```text
+PRECHECK:
+Apply the omission test to determine whether the candidate relation is mononuclear
+or multinuclear.
+
+If one span can be omitted while the other still performs the same local text function,
+    mark the indispensable span as NUCLEUS
+    and the omissible/supporting span as SATELLITE.
+
+If both spans remain independently functional and equally central,
+    treat the relation as MULTINUCLEAR.
+
+Use relation definitions and the intended reader effect to validate nuclearity.
+```
+
+```text
+If the omission test indicates that neither span is more nuclear, then
+    if the spans describe states of affairs in temporal or procedural order
+        assign Sequence
+    else if exactly two spans are comparable and differ in writer-relevant respects
+        assign Contrast
+    else if the spans enumerate comparable information of the same type
+        assign List
+    else
+        assign Joint
+```
+
+```text
+Else if S is acknowledged although it conflicts with N, assign Concession.
+Else if S is rejected or disfavored and W identifies with N, assign Antithesis.
+```
+
+```text
+Else if S supports N, then
+    if S increases belief in the truth of N
+        assign Evidence
+    else if S supports W's right or authority to present N
+        assign Justify
+```
+
+```text
+Else if S evaluates or frames N, then
+    if S appraises N
+        assign Evaluation
+    else if S relates N to a broader conceptual frame
+        assign Interpretation
+```
+
+```text
+Else if N is an action for R, then
+    if S increases desire to perform N
+        assign Motivation
+    else if S increases ability to perform N
+        assign Enablement
+```
+
+```text
+Else if the situations are hypothetical or unrealized, then
+    if S is the intended goal of the activity in N
+        assign Purpose
+    else if N depends on S not occurring
+        assign Otherwise
+    else if N depends on S occurring
+        assign Condition
+```
+
+```text
+Else if the relation is causal, then
+    if S causes an intentional action in N
+        assign Volitional Cause
+    else if S is an intentional response caused by N
+        assign Volitional Result
+    else if S non-deliberately causes N
+        assign Non-volitional Cause
+    else if S is a non-deliberate result of N
+        assign Non-volitional Result
+```
+
+```text
+Else if S helps R understand or situate N, then
+    if S supplies substantive prior knowledge
+        assign Background
+    else if S supplies a temporal, spatial, situational, or interpretive framework
+        assign Circumstance
+```
+
+```text
+Else if S supplies detail about N or an element of N, assign Elaboration.
+Else if S presents a problem and N contributes a resolution, assign Solutionhood.
+```
+
+```text
+Else if the relation is textual or organizational, then
+    if S readies R for N
+        assign Preparation
+    else if S repeats N at roughly equal scope
+        assign Restatement
+    else if S gives a shorter condensation of a larger N
+        assign Summary
+```
+
+```text
+Else
+    if both spans are equally important
+        assign Joint
+    else
+        choose the most informative applicable relation.
+```
+
+Return one relation and its nuclearity for each pair. Use `1>2` as evidence that unit 1 is structurally above unit 2 and `1<2` for the reverse, but validate the direction against the relation definition.
+
+```tsv
+doc_id	unit1	unit2	direction
+rstweb-demo	The roads were icy.	Because temperatures had fallen below freezing.	1>2
+rstweb-demo	First the alarm sounded.	Then everyone left the building.	1=2
+```

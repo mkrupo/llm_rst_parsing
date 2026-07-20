@@ -1,0 +1,113 @@
+Based on the definitions, analyze and assign rhetorical relations to the target textual units in triple backticks (tsv-formatted). Read all pairs and select one relation and nuclearity for each pair.
+
+### Antithesis
+- **N:** W identifies positively with N.
+- **S:** W rejects or gives less importance to S.
+- **N/S:** The spans are incompatible; recognizing this increases R's positive regard for N.
+- **Typical connectives:** but; rather; instead.
+
+### Background
+- **N/S:** Understanding S makes it easier for R to understand N by supplying prior or general information.
+- **Effect:** R's ability to comprehend N is increased.
+- **Remark:** Background often connects a larger introductory segment to N.
+
+### Circumstance
+- **S:** A temporal, spatial, situational, or interpretive framework.
+- **N/S:** N is interpreted within the framework in S.
+- **Typical connectives:** when; while; as.
+
+### Concession
+- **S:** W acknowledges S although it appears incompatible with N.
+- **N/S:** N still holds and is more central.
+- **Typical connectives:** although; but; still; despite.
+
+### Condition
+- **S:** A hypothetical, future, or unrealized situation.
+- **N/S:** Realization of N depends on realization of S.
+- **Typical connectives:** if; in case.
+
+### Elaboration
+- **N/S:** S adds detail about N or an element of N: member, instance, part, step, attribute, or specific detail.
+- **Effect:** R recognizes the additional detail.
+
+### Enablement
+- **N:** An action to be performed by R.
+- **N/S:** S increases R's ability to perform N.
+
+### Evaluation
+- **N/S:** S evaluates, assesses, or appraises N.
+- **Effect:** R recognizes the assessment.
+
+### Evidence
+- **N:** A claim R may not believe strongly enough.
+- **N/S:** S increases R's belief that N is true.
+
+### Interpretation
+- **N/S:** S interprets the meaning or significance of N through a broader framework.
+- **Remark:** Prefer Evaluation when appraisal is primary.
+
+### Justify
+- **N/S:** S increases R's readiness to accept W's right, basis, or authority to present N.
+- **Remark:** This supports the act of asserting rather than primarily proving N true.
+
+### Motivation
+- **N:** An action to be performed by R.
+- **N/S:** S increases R's desire to perform N.
+
+### Non-volitional Cause
+- **N/S:** S non-deliberately causes N.
+- **Effect:** R recognizes S as the cause of N.
+
+### Non-volitional Result
+- **N/S:** S is a non-deliberate result caused by N.
+- **Effect:** R recognizes N as the cause of S.
+
+### Otherwise
+- **S:** An unrealized situation.
+- **N/S:** N depends on the non-realization of S.
+
+### Purpose
+- **N:** An activity or action.
+- **S:** The intended goal realized through N.
+
+### Restatement
+- **N/S:** S repeats N in different words at roughly equal scope.
+
+### Solutionhood
+- **S:** A problem, question, request, or need.
+- **N/S:** N provides or contributes to a solution.
+
+### Summary
+- **N:** More than one EDU.
+- **N/S:** S gives a shorter condensation of N.
+
+### Volitional Cause
+- **N/S:** S causes or motivates an intentional action in N.
+
+### Volitional Result
+- **N/S:** S is an intentional response or result caused by N.
+
+### Preparation
+- **N/S:** S precedes N and readies or orients R toward N.
+- **Remark:** Preparation shapes expectations; Background supplies substantive knowledge.
+
+### Contrast
+- **N:** Exactly two equal-weight nuclei are comparable but differ in important respects.
+
+### Joint
+- **N:** Equal-weight spans are coherently connected without a more specific relation.
+
+### List
+- **N:** Equal-weight comparable items form a list or set.
+
+### Sequence
+- **N:** Equal-weight events or steps occur in temporal or procedural order.
+
+Use `NS` when unit 1 is nucleus, `SN` when unit 2 is nucleus, and `NN` for multinuclear relations. Distinguish Evidence from Justify, Antithesis from Concession and Contrast, Background from Circumstance and Preparation, cause from result, volitional from non-volitional causality, and Restatement from Summary.
+
+```tsv
+doc_id	unit1	unit2	direction
+rstweb-demo	Although facilities are normally standard,	this campground lacks them.	1<2
+rstweb-demo	The temperature fell.	The road therefore froze.	1>2
+rstweb-demo	The teacher entered.	Five minutes later she announced a test.	1=2
+```

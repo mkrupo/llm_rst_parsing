@@ -1,4 +1,6 @@
 import pathlib
+import subprocess
+import sys
 import tempfile
 import unittest
 from types import SimpleNamespace
@@ -249,6 +251,38 @@ class RunExperimentTests(unittest.TestCase):
         self.assertEqual(records[2]["status"], "ok")
         self.assertNotIn("SYSTEM SECRET", serialized)
         self.assertNotIn("USER SECRET", serialized)
+
+
+class CliHelpTests(unittest.TestCase):
+    def test_runner_help_documents_configuration_and_prompt_free_output(self):
+        result = subprocess.run(
+            [sys.executable, "-m", "src.run_e2e_icl", "--help"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+        for expected in (
+            "--endpoint",
+            "--model",
+            "--prompt",
+            "OPENAI_API_KEY",
+            "prompt_name",
+            "excludes prompt bodies",
+        ):
+            self.assertIn(expected, result.stdout)
+
+    def test_converter_help_documents_inputs_outputs_and_report(self):
+        interpreter = "/home/daniiligantev/miniconda3/envs/rstenv/bin/python"
+        result = subprocess.run(
+            [interpreter, "-m", "src.convert_e2e_to_rs3", "--help"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+        for expected in ("--input", "--output-dir", "--report"):
+            self.assertIn(expected, result.stdout)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,15 @@
+torch
+transformers
+accelerate
+datasets
+pyyaml
+pandas
+numpy
+scipy
+scikit-learn
+krippendorff
+tqdm
+matplotlib
+openai
+nltk
+rstconverter

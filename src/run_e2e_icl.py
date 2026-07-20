@@ -231,7 +231,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
             "Run e2e RST ICL parsing through OpenAI-compatible Chat Completions; "
-            "JSONL output excludes prompt bodies. Set OPENAI_API_KEY for authentication."
+            "JSONL output includes prompt_name but excludes prompt bodies. "
+            "Set OPENAI_API_KEY for authentication."
         )
     )
     parser.add_argument("--input", required=True, help="Header-bearing document TSV")

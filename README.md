@@ -329,6 +329,53 @@ python -m src.optional_cudr_bridge \
 
 This is intended only as an auxiliary relation-family bridge. It is not part of the core benchmark.
 
+## End-to-end ICL parsing through an OpenAI-compatible API
+
+The e2e runner parses complete documents into compact bracketed RST trees. It uses `prompts/system_prompt.txt` as the system message for every request and injects one document into the terminal TSV block of the selected `ICL_*_e2e.txt` user prompt.
+
+Input must be a header-bearing TSV with these columns:
+
+- `doc_id`: groups fragments into documents;
+- `text`: fragment text;
+- `index`: optional fragment index; one-based indices are assigned per document when omitted.
+
+Rows retain their source order. For example:
+
+```tsv
+doc_id	index	text
+gum_news_1	1	The committee met on Tuesday.
+gum_news_1	2	It approved the proposal.
+```
+
+Install the dependencies from `requirements.txt`, set the API key, and choose the endpoint and model on the command line:
+
+```bash
+export OPENAI_API_KEY="..."
+python -m src.run_e2e_icl \
+  --input data/processed/documents.tsv \
+  --prompt ICL_rstweb_algo_e2e.txt \
+  --output results/predictions/rstweb_e2e.jsonl \
+  --model gpt-4.1-mini \
+  --endpoint https://api.openai.com/v1
+```
+
+`--endpoint` accepts an OpenAI-compatible base URL, so the same runner can target compatible local or hosted servers. Optional controls include `--temperature`, `--max-tokens`, and `--timeout`.
+
+The output contains one JSON object per document with `doc_id`, `prompt_name`, `model`, `endpoint`, `status`, `raw_tree`, response metadata, and a structured error. Prompt bodies and credentials are deliberately excluded. A failed document is recorded and later documents continue.
+
+### Convert e2e results to RS3
+
+Convert every successful compact tree to a separate XML-based `.rs3` file with the environment containing `nltk` and `rstconverter`:
+
+```bash
+/home/daniiligantev/miniconda3/envs/rstenv/bin/python \
+  -m src.convert_e2e_to_rs3 \
+  --input results/predictions/rstweb_e2e.jsonl \
+  --output-dir results/rs3/rstweb_e2e
+```
+
+The converter writes one sanitized `<doc_id>.rs3` per successful record and `conversion_report.jsonl` in the output directory. API errors are skipped; malformed trees, unsafe identifiers, and filename collisions are reported without overwriting an existing result. Use `--report` to select another report path.
+
 ## Optional activation steering utilities
 
 The repository includes optional utilities for downstream generation experiments under:

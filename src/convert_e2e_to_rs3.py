@@ -9,10 +9,6 @@ import re
 from dataclasses import dataclass
 from typing import Dict, List, Optional
 
-from nltk import Tree
-from rstconverter.rs3 import write_compact_rs3
-
-
 _OUTER_FENCE = re.compile(
     r"\A```(?:text)?[ \t]*\n(?P<body>.*)\n```[ \t]*\Z",
     re.DOTALL | re.IGNORECASE,
@@ -62,6 +58,14 @@ def convert_results(
     report_path: Optional[pathlib.Path] = None,
 ) -> ConversionSummary:
     """Convert every successful JSONL tree and write a per-record report."""
+    try:
+        from nltk import Tree
+        from rstconverter.rs3 import write_compact_rs3
+    except ImportError as exc:
+        raise RuntimeError(
+            "RS3 conversion requires nltk and rstconverter; use the configured rstenv"
+        ) from exc
+
     output_dir.mkdir(parents=True, exist_ok=True)
     report_path = report_path or output_dir / "conversion_report.jsonl"
     report_path.parent.mkdir(parents=True, exist_ok=True)

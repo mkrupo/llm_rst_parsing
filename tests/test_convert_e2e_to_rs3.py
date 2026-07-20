@@ -1,4 +1,5 @@
 import json
+import importlib.util
 import pathlib
 import tempfile
 import unittest
@@ -42,6 +43,10 @@ class TreeCleanupTests(unittest.TestCase):
             safe_doc_filename(" ... ")
 
 
+@unittest.skipUnless(
+    importlib.util.find_spec("nltk") and importlib.util.find_spec("rstconverter"),
+    "RS3 integration dependencies are not installed in this interpreter",
+)
 class ConversionTests(unittest.TestCase):
     def test_converts_successes_and_reports_skips_failures_and_collisions(self):
         records = [

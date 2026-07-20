@@ -1,0 +1,173 @@
+You are an expert annotator. Based on the definitions, analyze the target text (tsv-formatted) and build a bracketed discourse tree end-to-end. Refer to text fragments by their index. Ensure the correct formatting of the tree.
+
+```text
+PRECHECK:
+Apply the omission test to determine whether the candidate relation is mononuclear
+or multinuclear.
+
+If one span can be omitted while the other still performs the same local text function,
+    mark the indispensable span as NUCLEUS
+    and the omissible/supporting span as SATELLITE.
+
+If both spans remain independently functional and equally central,
+    treat the relation as MULTINUCLEAR.
+
+Use relation definitions to validate nuclearity.
+```
+
+```text
+If several adjacent spans play the same role with respect to a larger segment, then
+    if they are explicitly linked by coordinating connectives such as "and", "or",
+    "also", or "in addition"
+        assign CONJUNCTION
+    else
+        assign LIST
+```
+
+```text
+If the omission test indicates that neither span is more nuclear, then
+    if the spans describe states of affairs in temporal order
+        assign SEQUENCE
+    else if exactly two spans are comparable but differ in writer-relevant respects
+        assign CONTRAST
+    else if the spans enumerate comparable information
+        if there is a coordinating connective
+            assign CONJUNCTION
+        else
+            assign LIST
+    else
+        assign JOINT
+```
+
+```text
+Else, if the omission test identifies NUCLEUS and SATELLITE,
+test primarily pragmatic relations before semantic ones.
+```
+
+```text
+If S makes it easier for R to understand N, especially by providing necessary
+prior/topic information, then
+    assign BACKGROUND
+```
+
+```text
+Else if the relation is adversative, contrastive, or expectation-violating, then
+    if neither span is more nuclear by the omission test
+        assign CONTRAST
+    else if S is acknowledged as true/valid but N still holds against expectation
+        assign CONCESSION
+    else if S is the rejected or less important thesis and W identifies with N
+        assign ANTITHESIS
+```
+
+```text
+Else if S supports a subjective claim, thesis, or evaluation in N, then
+    if S is presented as objective fact, observation, or acceptable evidence
+        assign EVIDENCE
+    else if S is also a subjective claim/thesis by W
+        assign REASON
+    else if S supports W’s right to present N or gives a basic justificatory stance
+        assign JUSTIFY
+```
+
+```text
+Else if the support relation runs in the other direction,
+and the omission test shows that the supporting/reason-giving span is more nuclear,
+    assign REASON-N
+```
+
+```text
+Else if one span evaluates the other from W’s perspective, then
+    if the evaluation is omissible and the evaluated material remains central
+        assign EVALUATION-S
+    else if the evaluation is the central point and the evaluated material is supporting
+        assign EVALUATION-N
+```
+
+```text
+Else if N is an action to be performed by the reader, then
+    if S increases R’s desire to perform N
+        assign MOTIVATION
+    else if S increases R’s ability to perform N
+        assign ENABLEMENT
+```
+
+```text
+Else if the relation involves unrealized, hypothetical, future, or potential situations, then
+    if N is an activity/action and S is the unrealized goal achieved through N
+        assign PURPOSE
+    else if realizing N prevents or impedes realizing S
+        assign OTHERWISE
+    else if N is realized only if S is not realized
+        assign UNLESS
+    else if realization of N depends on realization of S
+        assign CONDITION
+```
+
+```text
+Else if the relation is factive causality, then
+    if S causes N and the omission test makes N central
+        assign CAUSE
+    else if N causes S and the omission test makes N central
+        assign RESULT
+```
+
+```text
+Else if N is an activity/action and S gives the instrument, method, or way
+that makes N possible or easier, then
+    assign MEANS
+```
+
+```text
+Else if S presents a problem and N presents a solution, then
+    assign SOLUTIONHOOD
+```
+
+```text
+Else if S provides an actual temporal, locative, or situational framework
+for interpreting N, then
+    assign CIRCUMSTANCE
+```
+
+```text
+Else if S shifts N into a different conceptual frame without primarily evaluating it, then
+    assign INTERPRETATION
+```
+
+```text
+Else if S provides detail or more information about N, then
+    if S elaborates a single entity mentioned in N
+        assign E-ELABORATION
+    else
+        assign ELABORATION
+```
+
+```text
+Else if the relation is mainly textual or organizational, then
+    if S precedes N and merely orients R toward N
+        assign PREPARATION
+    else if S repeats N with different wording and roughly equal size
+        assign RESTATEMENT
+    else if S follows a multi-EDU N and gives a shorter restatement
+        assign SUMMARY
+```
+
+```text
+Else
+    if both spans are equally important
+        assign JOINT
+    else
+        choose the most informative applicable relation rather than a vague one.
+```
+
+bracketed tree example:
+```
+(SN-Evaluation
+        (text 1)
+        (NS-Evaluation
+          (SN-Cause (text 2) (NN-Joint (text 3) (text 4)))
+          (NS-Cause (text 5) (text 6))))
+```
+
+```tsv
+```

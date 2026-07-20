@@ -1,0 +1,261 @@
+Based on the definitions, analyze and assign rhetorical relations to the target textual units in triple backticks (tsv-formatted). 
+
+## Background
+- **N/S:** Understanding S makes it easier for R to understand the content of N; without the background information in S, it would be difficult to comprehend N. In a text, S mostly but not always precedes N. A Background S at the beginning of the text often serves to introduce the topic of the text.
+- **Effect:** R’s ability to comprehend N is increased.
+- **Typical connectives:** Rarely signalled by connectives.
+- **Example:** [Until 1984, Burkina Faso was called Obervolta.]S [According to an EMNID poll, many Europeans today believe that they are two different countries.]N
+- **Remark:** This relation only rarely holds between two EDUs; mostly it will connect larger segments. Many editorials start with a Background S, which serves as the starting point for W’s subsequent assessment.
+
+## Antithesis
+- **N:** W regards the content of N as more important; it is the antithesis that W is identifying with.
+- **S:** In comparison to N, W regards the content of S as less important. S is considered to be the thesis with which W is not identifying.
+- **N/S:** The contents of N and S are not compatible – often on the level of their evaluation. Due to the incompatibility, one cannot have equal regard for N and S. In a text, S usually precedes N.
+- **Effect:** R’s positive regard for N is increased.
+- **Typical connectives:** but; neg - rather; neg - instead; ...
+- **Example:** Attempt of a city to sell off real estate [At one point they seemed to have succeeded.]S [But the buyer didn’t pay.]N (maz-6193, PCC) [It was not the man who received negative votes]S [but his job, which turns him into a supporter for the bombing test range.]N (maz-17300, PCC)
+- **Remark:** Similar relations are Concession and multinuclear Contrast; see also Section 4.6. A subgroup of Antithesis is cases where N serves to correct an assumption stated in S.
+
+## Concession
+- **N:** W regards the content of N as more important.
+- **S:** In comparison to N, W regards the content of S as less important, but s/he does not dispute that S holds.
+- **N/S:** W concedes S and implicitly confirms that S and N are usually not compatible; in the current instance, however, they are compatible, and N is being emphasized.
+- **Effect:** R’s positive regard for N is increased.
+- **Typical connectives:** although; but; still; despite; ...
+- **Example:** [Sanitary facilities nowadays are a standard on big campgrounds.]S [But Radewege has a hard time with upgrading to such standards.]N (maz-6488, PCC)
+
+## Evidence
+- **N:** A subjective statement/thesis/claim, which R might not accept or might not regard as sufficiently important or positive.
+- **S:** A statement that R is likely to accept; usually an “objective” description of a fact.
+- **N/S:** Understanding S makes it easier for R to accept N, or to share the particular viewpoint of W.
+- **Effect:** R’s belief in N is increased.
+- **Typical connectives:** Causal connectives.
+- **Example:** Debate about having two subjects 'Religion' and 'LER' at school [And now even our state government seems determined to remove this apparent equality between the two subjects.]N [Stolpe, Reiche, and others do say Yes to the possible compromise offered by the Karlsruhe court, but they also decree: There cannot be any voluntary subject area LER/Religion.]S (maz-6159, PCC)
+- **Remark:** Evidence often connects a larger S segment to a shorter N (the thesis).
+
+## Reason
+- **N:** A subjective statement/thesis/claim, which R might not accept or might not regard as sufficiently important or positive.
+- **S:** A subjective statement/thesis/claim.
+- **N/S:** Understanding S makes it easier for R to accept N, or to share the particular viewpoint of W.
+- **Effect:** R’s belief in N is increased.
+- **Typical connectives:** Causal connectives.
+- **Example:** [With each new day of air raids, the military operations of the U.S. lose more and more credibility.]N [By means of comprehensive area-wide destruction you can’t hit the Taliban, nor can you eliminate bin Laden.]S (maz-5701, PCC)
+- **Remark:** Reason is more specific than Evidence. The difference lies in whether S is being presented by W as “objective” (Evidence) or also constitutes a subjective statement itself (Reason).
+
+## Reason-N
+- **N:** A subjective statement/thesis/claim.
+- **S:** A subjective statement/thesis/claim, which R might not accept or might not regard as sufficiently important or positive.
+- **N/S:** Understanding N makes it easier for R to accept S, or to share the particular viewpoint of W.
+- **Effect:** R’s belief in S is increased.
+- **Typical connectives:** Causal connectives.
+- **Remark:** This relation is parallel to Reason. It applies when for the text function, the reason is more important than the cause. In the genre of editorials, this will be relatively rare.
+
+## Justify
+- **N:** A subjective statement/thesis/claim, which R might not accept or might not regard as sufficiently important or positive.
+- **S:** A statement of a fundamental (e.g., political, moral) attitude of the acting person.
+- **N/S:** Understanding S makes it easier for R to accept N, or to share the particular viewpoint of W.
+- **Effect:** R’s readiness to accept W’s right to present N is increased.
+- **Typical connectives:** Causal connectives.
+- **Example:** [I’ll never eat this dish.]N [I’m a vegetarian.]S
+
+## Evaluation-S
+- **N:** Description of a state of affairs, or a subjective statement (but not from W’s perspective).
+- **S:** A subjective evaluation (positive/negative, desirable/undesirable) from W’s perspective.
+- **N/S:** S evaluates N.
+- **Effect:** R recognizes that S assesses N and recognizes the value it assigns.
+- **Typical connectives:** Rarely signalled by connectives.
+- **Example:** [Its past seemed to shadow the big hotel like a curse.]S [For many years the Potsdam local court had tried to find a buyer, without success.]N (maz-6193, PCC)
+- **Remark:** Usually, the 'evaluating' segment follows the 'evaluated' one. But sometimes the order is the opposite, as in the example.
+
+## Evaluation-N
+- **N:** A subjective evaluation (positive/negative, desirable/undesirable) from W’s perspective.
+- **S:** Description of a state of affairs, or a subjective statement (but not from W’s perspective).
+- **N/S:** N evaluates S.
+- **Effect:** R recognizes that N assesses S and recognizes the value it assigns.
+- **Typical connectives:** Rarely signalled by connectives.
+- **Remark:** This relation is parallel to Evaluation-S. Deciding between the two depends solely on judging the relative importance of the segments for the text.
+
+## Motivation
+- **N:** An action to be performed by R.
+- **N/S:** S presents a reason for performing the action described in N.
+- **Effect:** R’s desire to perform the action in N is increased.
+- **Typical connectives:** Causal connectives.
+- **Example:** [Running the Olympic Games is a win-win situation for any city.]S [Berlin must now apply for the 2026 games!]N
+- **Remark:** In the genre of editorials, this relation is rare. Sometimes W metaphorically encourages all Rs to do a certain action, as in the example given here.
+
+## Enablement
+- **N:** An action to be performed by R.
+- **N/S:** Comprehending S makes it easier for R to perform the action described in N.
+- **Effect:** R’s potential ability to perform the action in N increases.
+- **Typical connectives:**
+- **Example:** [Replace the spark plugs.]N [A square key wrench can be found right under the cap.]S
+- **Remark:** In the genre of editorials, this relation is rare.
+
+## 4.3 Primarily semantic relations
+### Circumstance
+- **S:** An event or state that actually occurs or has occurred (i.e., not a hypothetical one).
+- **N/S:** S characterizes a framework in which N is to be interpreted, such as its temporal or locative position.
+- **Effect:** R recognizes that S provides the framework for interpreting N.
+- **Typical connectives:** as; when; while; ... for a temporal frame.
+- **Example:** [When Veag came under pressure because of the deregulation of the electricity market,]S [they compensated for this by squeezing their suppliers.]N (maz-5297, PCC)
+
+### Condition
+- **S:** A hypothetical, future, or in other ways unreal situation.
+- **N/S:** The realization of N depends on the realization of S.
+- **Effect:** R recognizes how the realization of N depends on the realization of S.
+- **Typical connectives:** if .. then; in case; ...
+- **Example:** [When more and more communities are in financial trouble,]S [regularly replacing the school textbooks becomes just impossible.]N (maz-00002, PCC) [If the sanitary facilities are still not available in the coming season,]S [Radewege is in danger of losing the competition for attracting boats to the campground.]N (maz-6488, PCC)
+
+### Otherwise
+- **N:** A hypothetical, future, or in other ways unreal situation.
+- **S:** A hypothetical, future, or in other ways unreal situation.
+- **N/S:** The realization of N impedes the realization of S.
+- **Effect:** R recognizes the dependency relation of prevention between the realization of N and the realization of S.
+- **Typical connectives:** otherwise; ...
+- **Example:** [The city would be smart not to respond to this moral imperative.]N [Otherwise it would have to install speed bumps in front of every single school.]S (maz-5709, PCC) [The community council should revoke its decision,]N [before citizens start buying torches.]S (maz-15609, PCC)
+
+### Unless
+- **N:** A hypothetical, future, or in other ways unrealized situation.
+- **S:** A hypothetical, future, or in other ways unrealized situation.
+- **N/S:** S determines the realization of N: N is only being realized if S is not being realized.
+- **Effect:** R recognizes that N is realized provided that S is not realized.
+- **Typical connectives:** unless; ...
+- **Example:** [Tomorrow the satellite will fall into the Pacific Ocean.]N [Unless it burns up upon entering the earth's atmosphere, after all.]S
+
+### Elaboration
+- **N/S:** S provides details or more information on the state of affairs described in N (but not on a single entity mentioned in N; see E-Elaboration below). N precedes S in the text. Typical relations between N and S are set::element, whole::part, abstraction::instance, procedure::step.
+- **Effect:** R recognizes S as providing additional detail for the state of affairs in N. R identifies the element of subject matter for which detail is provided.
+- **Typical connectives:** in particular; for example; ...
+- **Example:** [Diepensee will relocate.]N [No question about that.]S (maz-6993, PCC)
+
+### E-Elaboration
+- **N/S:** S provides details or more information on a single entity mentioned in N. N precedes S in the text.
+- **Effect:** R recognizes S as providing additional detail for an entity in N. R identifies the element of subject matter for which detail is provided.
+- **Typical connectives:** Rarely signalled by connectives.
+- **Example:** [Today thousands of visitors want to sense the atmosphere of a historical classroom,]N [as it exists only in very few places in Germany.]S (maz-6728, PCC)
+- **Remark:** In the example, the as-clause (S) does not provide information on the ‘sense’ activity but on the ‘classroom’, i.e., an entity mentioned in N.
+
+### Interpretation
+- **N/S:** S shifts the content of N to a different conceptual frame. This does not imply an evaluation of N (or the evaluation is of only secondary importance). N precedes S in the text.
+- **Effect:** R recognizes that S relates N to a framework of ideas not involved in the knowledge presented in N itself.
+- **Typical connectives:** thus; ...
+- **Example:** [Now for the first time we bought a Cadillac.]N [That probably makes us part of the bourgeoisie.]S
+- **Remark:** Whenever S primarily provides an assessment (on the positive/negative scale) of N, Evaluation is to be used, rather than Interpretation.
+
+### Means
+- **N:** An activity or action.
+- **N/S:** S provides information that makes the realization/execution of N more probable or simple (e.g., an instrument).
+- **Effect:** R recognizes that the method or instrument in S tends to make the realization of N more likely.
+- **Typical connectives:** thus; ...
+- **Example:** [In August, Berliners always enjoy travelling to Lichtenrade.]N [To that end, they usually take the S25 train.]S [The chairman of the party made sure to be on bad terms with two mayors]S [and thus will lose credibility and standing.]N (maz-18160, PCC)
+
+### Cause
+- **N:** A state or event in the world.
+- **S:** A state or event in the world.
+- **N/S:** The state/event in N is being caused by the state/event in S.
+- **Effect:** R recognizes S as a cause of N.
+- **Typical connectives:** because; since; therefore; ...
+- **Example:** Unexpected press report on relocating the village of Diepensee. [Mayer Jochen Wagner reacted with surprise, too.]N [After all, just on Monday the community council had agreed to expand the village of Diepensee.]S (maz-6993, PCC)
+
+### Result
+- **N:** A state or event in the world.
+- **S:** A state or event in the world.
+- **N/S:** The state/event in S is being caused by the state/event in N.
+- **Effect:** R recognizes N as a cause of S.
+- **Typical connectives:** because; since; therefore; ...
+- **Remark:** This relation is parallel to Cause. Deciding between the two depends solely on judging the relative importance of the segments for the text.
+
+### Purpose
+- **N:** An activity or action.
+- **S:** A hypothetical, future, or in other ways unrealized situation.
+- **N/S:** S is being realized through the realization/execution of N.
+- **Effect:** R recognizes that the activity in N is initiated in order to realize S.
+- **Typical connectives:** in order to; to; ...
+- **Example:** [In order to protect their troops,]S [the U.S. do not comment on news reports on the start of a ground operation in Afghanistan.]N (maz-5701, PCC)
+- **Remark:** There is a causal relationship in a wide sense. The difference to the relations Cause/Result is that with Purpose, S is clearly marked as hypothetical/unrealized, and represents the intention or goal of the acting person.
+
+### Solutionhood
+- **S:** The content of S can be regarded as a problem.
+- **N/S:** The content of N can be regarded as a solution to the problem in N. N usually precedes S in the text.
+- **Effect:** R recognizes N as a solution to the problem presented in S.
+- **Typical connectives:** Rarely signalled by connectives.
+- **Example:** [With the anti-smoker regulations being passed, many pubs will be caught in a trap.]S [They should start looking into possibilities for having separate rooms.]N
+
+4.4 Textual relations
+The following three relations primarily serve to organize the text and its under-
+standing, so they belong neither to the semantic (describing the world) nor to
+the pragmatic (change the attitude of readers) group.
+
+### Preparation
+- **N/S:** S precedes N in the text. S orients R toward the topic of N.
+- **Effect:** R is more ready, interested or oriented for reading N.
+- **Typical connectives:** Rarely signalled by connectives; sometimes by a colon.
+- **Example:** [One thing is evident:]S [With each day of air raids, the military operations of the U.S. lose more and more credibility.]N (maz-5701, PCC)
+- **Remark:** This relation is to be used when S does not serve any stronger purpose than setting the topic for N, or when it consists of an introductory formula. S should contain only minimal information on its own.
+
+### Restatement
+- **N/S:** N precedes S in the text. S repeats the information given in N, using a different wording. N and S are of roughly equal size.
+- **Effect:** R recognizes S as a restatement of N.
+- **Typical connectives:** in other words; ...
+- **Example:** [The mayor gave all the information to the councillors,]N [kind of filling them in completely.]S
+
+### Summary
+- **N:** N consists of more than one EDU.
+- **N/S:** S succeeds N in the text and repeats the information given in N, but in a shorter form.
+- **Effect:** R recognizes S as a shorter restatement of N.
+- **Typical connectives:** in short; ...
+
+4.5 Multinuclear relations
+Among the multinuclear relations, Sequence belongs to the semantic type, while
+the others can work as semantic, pragmatic or textual, depending on context.
+
+### Contrast
+- **N:** Exactly two nuclei. Both are of equal importance for W’s purposes. The contents are comparable yet not identical. They differ in aspects that are important to W.
+- **Effect:** R recognizes the comparability and the difference(s) yielded by
+the comparison being made.
+- **Typical connectives:** on the other hand; yet; but; ...
+- **Example:** [My first car was small.]N [The second was already a sizable limousine.]N
+
+### Sequence
+- **N:** The nuclei describe states of affairs that occur in a particular temporal order.
+- **Effect:** R recognizes the succession relationships among the nuclei.
+- **Typical connectives:** then; before; afterwards; ...
+- **Example:** [At nine o’clock the teacher entered the classroom.]N [Five minutes later she announced that a test will be written.]N
+- **Remark:** The states of affairs can be presented in their actual temporal order (“afterwards”) or in the opposite one (“before that”).
+
+### List
+- **N:** The nuclei provide information that can be recognized as related, enumerating. They all contribute to the text function in the same way.
+- **Effect:** R recognizes the comparability of linked items.
+- **Typical connectives:** Comma, enumeration, ...
+- **Example:** What I did yesterday: [Cook dinner,]N [look after the kids,]N [clean the bathromm.]N
+- **Remark:** See Section 4.6 for hints on handling elliptical contexts (as in the example).
+
+### Conjunction
+- **N:** The nuclei provide information that can be recognized as related, enumerating. They all contribute to the text function in the same way, and they are linked by coordinating conjunctions. 
+- **Effect:** R recognizes that the linked items are conjoined.
+- **Typical connectives:** and; or; ...
+- **Example:** [Should the aerial warfare have been meant merely as a menace,]S [it would lose its legitimacy at the latest when winter kicks in and triggers the inevitable human disaster.]N [And the U.S. would lose their backing in Western Europe.]N ]N (maz-2318, PCC) 
+- **Remark:** The functions of List and Conjunction are identical. When the surface condition for Conjunction holds, this relation is to be used.
+
+### Joint
+- **N:** The nuclei provide different kinds of information, which are not of the same type; yet they are not in a clearly identifiable semantic or pragmatic relation, nor do they form an enumeration. Still, there is a coherent link, as they contribute in similar ways to the overall text function.
+- **Effect:** R recognizes that each nucleus contributes its own message, which however serve the same overall text purpose.
+- **Typical connectives:** Additive connectives such as in addition; also.
+- **Example:** See Section 6.
+- **Remark:** Joint is to be used when a multinuclear relation is needed (from the text-global perspective) but none of the specific relations are applicable.
+
+```
+doc_id	unit1	unit2	direction
+maz-6993	Diepensee siedelt um .	Umsiedlung , hieß es da , nur vorbehaltlich der Privatisierung der Flughafen-Holding .	1>2
+maz-6993	Diepensee siedelt um .	Ohne Wenn und Aber .	1<2
+maz-6993	Diepensee siedelt um .	Dessen konnten sich die vor dem möglichen Ausbau des Flughafens Schönefeld weichenden Dorfbewohner gewiss sein .	1<2
+maz-6993	Bis eine Presseinformation der Ausbau-Planer einschlug , wie eine Bombe .	Umsiedlung , hieß es da , nur vorbehaltlich der Privatisierung der Flughafen-Holding .	1>2
+maz-6993	Umsiedlung , hieß es da , nur vorbehaltlich der Privatisierung der Flughafen-Holding .	Soll dieser Beschluss bald nicht mal mehr das Papier wert sein , auf dem er gedruckt wurde ?	1>2
+maz-6993	Überrascht reagierte auch der Königs-Wusterhausener Bürgermeister Jochen Wagner .	Schließlich gaben die Stadtverordneten erst Montagabend grünes Licht für die weitere Erschließung des neuen Ortsteils Diepensee .	1>2
+maz-6993	Schließlich gaben die Stadtverordneten erst Montagabend grünes Licht für die weitere Erschließung des neuen Ortsteils Diepensee .	Soll dieser Beschluss bald nicht mal mehr das Papier wert sein , auf dem er gedruckt wurde ?	1>2
+maz-6993	Soll dieser Beschluss bald nicht mal mehr das Papier wert sein , auf dem er gedruckt wurde ?	Das wäre denkbar .	1<2
+maz-6993	Das wäre denkbar .	Schließlich läuft Ende Oktober die Angebotsfrist für die Privatisierung der Flughafen-Holding aus .	1<2
+maz-6993	Möglicherweise legt das Baukonzern-Bieterkonsortium wieder keinen verhandelbaren Vorschlag auf den Tisch .	Dann müssten die Holding-Gesellschafter - Bund , Brandenburg und Berlin - sowohl die Kosten für den Ausbau und die Anbindung des Flughafens Schönefeld , als auch für die Umsiedlung Diepensees aufbringen .	1>2
+maz-6993	Schließlich läuft Ende Oktober die Angebotsfrist für die Privatisierung der Flughafen-Holding aus .	Dann müssten die Holding-Gesellschafter - Bund , Brandenburg und Berlin - sowohl die Kosten für den Ausbau und die Anbindung des Flughafens Schönefeld , als auch für die Umsiedlung Diepensees aufbringen .	1<2
+maz-6993	Dann müssten die Holding-Gesellschafter - Bund , Brandenburg und Berlin - sowohl die Kosten für den Ausbau und die Anbindung des Flughafens Schönefeld , als auch für die Umsiedlung Diepensees aufbringen .	Vorbehalte scheinen da angesichts leerer Kassen aller drei Gesellschafter durchaus angebracht .	1<2
+```

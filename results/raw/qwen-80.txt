@@ -1,0 +1,135 @@
+(NN-Joint
+  (NN-Contrast
+    (text 1)
+    (NS-Result
+      (text 2)
+      (text 3)
+    )
+  )
+  (SN-Background
+    (text 4)
+    (NN-Contrast
+      (text 5)
+      (text 6)
+    )
+  )
+  (NS-E-Elaboration
+    (SN-Purpose
+      (text 7)
+      (text 8)
+    )
+    (text 9)
+  )
+  (NN-Joint
+    (SN-Evaluation
+      (text 10)
+      (NS-Reason
+        (text 11)
+        (text 12)
+      )
+    )
+    (text 13)
+  )
+  (NN-Contrast
+    (NS-Attribution
+      (text 14)
+      (text 15)
+    )
+    (text 16)
+  )
+  (SN-Solutionhood
+    (NS-Elaboration
+      (text 17)
+      (text 18)
+    )
+    (text 19)
+  )
+  (NN-Contrast
+    (NS-Elaboration
+      (SN-Purpose
+        (text 20)
+        (text 21)
+      )
+      (text 22)
+    )
+    (NN-Joint
+      (text 23)
+      (text 24)
+    )
+  )
+  (SN-Contrast
+    (NS-Cause
+      (text 25)
+      (text 26)
+    )
+    (SN-Attribution
+      (text 27)
+      (text 28)
+    )
+  )
+  (NS-Result
+    (text 29)
+    (text 30)
+  )
+  (SN-Purpose
+    (text 31)
+    (text 32)
+  )
+  (SN-Attribution
+    (text 33)
+    (SN-Purpose
+      (text 34)
+      (text 35)
+    )
+  )
+  (SN-Contrast
+    (text 36)
+    (SN-Attribution
+      (text 38)
+      (NS-Elaboration
+        (text 39)
+        (text 40)
+      )
+    )
+  )
+  (NS-E-Elaboration
+    (SN-Evaluation
+      (text 41)
+      (text 42)
+    )
+    (text 43)
+  )
+  (text 44)
+  (SN-Circumstance
+    (text 45)
+    (NS-Attribution
+      (text 46)
+      (text 47)
+    )
+  )
+  (text 48)
+  (SN-Preparation
+    (text 49)
+    (NN-Joint
+      (SN-Preparation
+        (text 50)
+        (NN-List
+          (text 51)
+          (text 52)
+        )
+      )
+      (SN-Preparation
+        (text 53)
+        (text 54)
+      )
+      (SN-Preparation
+        (text 55)
+        (text 56)
+      )
+      (SN-Preparation
+        (text 57)
+        (text 58)
+      )
+    )
+  )
+)

@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rst>
+  <header>
+    <relations>
+      <rel name="Antithesis" type="rst"/>
+      <rel name="Attribution" type="rst"/>
+      <rel name="Background" type="rst"/>
+      <rel name="Cause" type="rst"/>
+      <rel name="Circumstance" type="rst"/>
+      <rel name="Concession" type="rst"/>
+      <rel name="Condition" type="rst"/>
+      <rel name="Conjunction" type="multinuc"/>
+      <rel name="Contrast" type="rst"/>
+      <rel name="Disjunction" type="multinuc"/>
+      <rel name="E-Elaboration" type="rst"/>
+      <rel name="Elaboration" type="rst"/>
+      <rel name="Enablement" type="rst"/>
+      <rel name="Evaluation" type="rst"/>
+      <rel name="Evidence" type="rst"/>
+      <rel name="Interpretation" type="rst"/>
+      <rel name="Joint" type="multinuc"/>
+      <rel name="Justify" type="rst"/>
+      <rel name="List" type="multinuc"/>
+      <rel name="Motivation" type="rst"/>
+      <rel name="Multinuclear-Contrast" type="multinuc"/>
+      <rel name="Otherwise" type="rst"/>
+      <rel name="Preparation" type="rst"/>
+      <rel name="Purpose" type="rst"/>
+      <rel name="Reason" type="rst"/>
+      <rel name="Restatement" type="rst"/>
+      <rel name="Result" type="rst"/>
+      <rel name="Sequence" type="multinuc"/>
+      <rel name="Solutionhood" type="rst"/>
+      <rel name="Summary" type="rst"/>
+    </relations>
+  </header>
+  <body>
+    <segment id="5" parent="3" relname="Multinuclear-Contrast">1</segment>
+    <segment id="9" parent="7" relname="span">2</segment>
+    <segment id="11" parent="9" relname="Result">3</segment>
+    <segment id="15" parent="17" relname="Background">4</segment>
+    <segment id="19" parent="17" relname="Multinuclear-Contrast">5</segment>
+    <segment id="21" parent="17" relname="Multinuclear-Contrast">6</segment>
+    <segment id="27" parent="29" relname="Purpose">7</segment>
+    <segment id="29" parent="25" relname="span">8</segment>
+    <segment id="31" parent="25" relname="E-Elaboration">9</segment>
+    <segment id="37" parent="39" relname="Evaluation">10</segment>
+    <segment id="41" parent="39" relname="span">11</segment>
+    <segment id="43" parent="41" relname="Reason">12</segment>
+    <segment id="45" parent="33" relname="Joint">13</segment>
+    <segment id="51" parent="49" relname="span">14</segment>
+    <segment id="53" parent="51" relname="Attribution">15</segment>
+    <segment id="55" parent="47" relname="Multinuclear-Contrast">16</segment>
+    <segment id="61" parent="59" relname="span">17</segment>
+    <segment id="63" parent="61" relname="Elaboration">18</segment>
+    <segment id="65" parent="57" relname="span">19</segment>
+    <segment id="73" parent="75" relname="Purpose">20</segment>
+    <segment id="75" parent="71" relname="span">21</segment>
+    <segment id="77" parent="71" relname="Elaboration">22</segment>
+    <segment id="81" parent="79" relname="Joint">23</segment>
+    <segment id="83" parent="79" relname="Joint">24</segment>
+    <segment id="89" parent="87" relname="span">25</segment>
+    <segment id="91" parent="89" relname="Cause">26</segment>
+    <segment id="95" parent="97" relname="Attribution">27</segment>
+    <segment id="97" parent="93" relname="span">28</segment>
+    <segment id="101" parent="99" relname="span">29</segment>
+    <segment id="103" parent="101" relname="Result">30</segment>
+    <segment id="107" parent="109" relname="Purpose">31</segment>
+    <segment id="109" parent="105" relname="span">32</segment>
+    <segment id="113" parent="115" relname="Attribution">33</segment>
+    <segment id="117" parent="119" relname="Purpose">34</segment>
+    <segment id="119" parent="115" relname="span">35</segment>
+    <segment id="123" parent="125" relname="Contrast">36</segment>
+    <segment id="127" parent="129" relname="Attribution">38</segment>
+    <segment id="131" parent="129" relname="span">39</segment>
+    <segment id="133" parent="131" relname="Elaboration">40</segment>
+    <segment id="139" parent="141" relname="Evaluation">41</segment>
+    <segment id="141" parent="137" relname="span">42</segment>
+    <segment id="143" parent="137" relname="E-Elaboration">43</segment>
+    <segment id="145" parent="1" relname="Joint">44</segment>
+    <segment id="149" parent="151" relname="Circumstance">45</segment>
+    <segment id="153" parent="151" relname="span">46</segment>
+    <segment id="155" parent="153" relname="Attribution">47</segment>
+    <segment id="157" parent="1" relname="Joint">48</segment>
+    <segment id="161" parent="163" relname="Preparation">49</segment>
+    <segment id="167" parent="169" relname="Preparation">50</segment>
+    <segment id="171" parent="169" relname="List">51</segment>
+    <segment id="173" parent="169" relname="List">52</segment>
+    <segment id="177" parent="179" relname="Preparation">53</segment>
+    <segment id="179" parent="175" relname="span">54</segment>
+    <segment id="183" parent="185" relname="Preparation">55</segment>
+    <segment id="185" parent="181" relname="span">56</segment>
+    <segment id="189" parent="191" relname="Preparation">57</segment>
+    <segment id="191" parent="187" relname="span">58</segment>
+    <group id="1" type="multinuc"/>
+    <group id="3" type="multinuc" parent="1" relname="Joint"/>
+    <group id="7" type="span" parent="3" relname="Multinuclear-Contrast"/>
+    <group id="13" type="span" parent="1" relname="Joint"/>
+    <group id="17" type="multinuc" parent="13" relname="span"/>
+    <group id="23" type="span" parent="1" relname="Joint"/>
+    <group id="25" type="span" parent="23" relname="span"/>
+    <group id="33" type="multinuc" parent="1" relname="Joint"/>
+    <group id="35" type="span" parent="33" relname="Joint"/>
+    <group id="39" type="span" parent="35" relname="span"/>
+    <group id="47" type="multinuc" parent="1" relname="Joint"/>
+    <group id="49" type="span" parent="47" relname="Multinuclear-Contrast"/>
+    <group id="57" type="span" parent="1" relname="Joint"/>
+    <group id="59" type="span" parent="65" relname="Solutionhood"/>
+    <group id="67" type="multinuc" parent="1" relname="Joint"/>
+    <group id="69" type="span" parent="67" relname="Multinuclear-Contrast"/>
+    <group id="71" type="span" parent="69" relname="span"/>
+    <group id="79" type="multinuc" parent="67" relname="Multinuclear-Contrast"/>
+    <group id="85" type="span" parent="1" relname="Joint"/>
+    <group id="87" type="span" parent="93" relname="Contrast"/>
+    <group id="93" type="span" parent="85" relname="span"/>
+    <group id="99" type="span" parent="1" relname="Joint"/>
+    <group id="105" type="span" parent="1" relname="Joint"/>
+    <group id="111" type="span" parent="1" relname="Joint"/>
+    <group id="115" type="span" parent="111" relname="span"/>
+    <group id="121" type="span" parent="1" relname="Joint"/>
+    <group id="125" type="span" parent="121" relname="span"/>
+    <group id="129" type="span" parent="125" relname="span"/>
+    <group id="135" type="span" parent="1" relname="Joint"/>
+    <group id="137" type="span" parent="135" relname="span"/>
+    <group id="147" type="span" parent="1" relname="Joint"/>
+    <group id="151" type="span" parent="147" relname="span"/>
+    <group id="159" type="span" parent="1" relname="Joint"/>
+    <group id="163" type="multinuc" parent="159" relname="span"/>
+    <group id="165" type="span" parent="163" relname="Joint"/>
+    <group id="169" type="multinuc" parent="165" relname="span"/>
+    <group id="175" type="span" parent="163" relname="Joint"/>
+    <group id="181" type="span" parent="163" relname="Joint"/>
+    <group id="187" type="span" parent="163" relname="Joint"/>
+  </body>
+</rst>

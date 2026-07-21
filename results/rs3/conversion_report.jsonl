@@ -1,0 +1,5 @@
+{"line": 1, "doc_id": "deepseekv4.1", "status": "generated", "output_file": "results/rs3/deepseekv4.1.rs3", "error": null}
+{"line": 2, "doc_id": "deepseekv4.2", "status": "generated", "output_file": "results/rs3/deepseekv4.2.rs3", "error": null}
+{"line": 3, "doc_id": "deepseekv4", "status": "generated", "output_file": "results/rs3/deepseekv4.rs3", "error": null}
+{"line": 4, "doc_id": "gpt5.5-medium", "status": "generated", "output_file": "results/rs3/gpt5.5-medium.rs3", "error": null}
+{"line": 5, "doc_id": "qwen-80", "status": "generated", "output_file": "results/rs3/qwen-80.rs3", "error": null}

@@ -1,0 +1,122 @@
+I’ll answer as a discourse parsing specialist in RST-style annotation.
+
+I treated the uploaded definitions and TSV text as the source material. 
+
+```text
+(NN-list
+  (NN-joint
+    (SN-antithesis
+      (NS-evidence
+        (text 1)
+        (SN-circumstance
+          (text 4)
+          (text 5)))
+      (NN-conjunction
+        (NS-Result
+          (text 2)
+          (text 3))
+        (text 6)))
+    (NS-e-elaboration
+      (NS-purpose
+        (text 7)
+        (text 8))
+      (text 9)))
+
+  (NN-list
+    (NS-Result
+      (text 10)
+      (NS-evidence
+        (text 11)
+        (text 12)))
+    (text 13))
+
+  (SN-antithesis
+    (NS-attribution
+      (text 14)
+      (text 15))
+    (text 16))
+
+  (NS-elaboration
+    (NS-e-elaboration
+      (text 17)
+      (text 18))
+    (text 19))
+
+  (SN-antithesis
+    (NS-means
+      (NN-same-unit
+        (text 20)
+        (text 21))
+      (text 22))
+    (NN-conjunction
+      (text 23)
+      (text 24)))
+
+  (SN-antithesis
+    (NS-cause
+      (text 25)
+      (text 26))
+    (SN-attribution
+      (text 27)
+      (text 28)))
+
+  (NS-Result
+    (text 29)
+    (text 30))
+
+  (NS-evidence
+    (NS-purpose
+      (text 31)
+      (text 32))
+    (SN-attribution
+      (text 33)
+      (NS-purpose
+        (text 34)
+        (text 35))))
+
+  (SN-concession
+    (text 36)
+    (SN-preparation
+      (text 37)
+      (SN-attribution
+        (text 38)
+        (NN-same-unit
+          (text 39)
+          (text 40)))))
+
+  (NS-interpretation
+    (text 41)
+    (NS-e-elaboration
+      (text 42)
+      (text 43)))
+
+  (text 44)
+
+  (NS-circumstance
+    (text 45)
+    (SN-attribution
+      (text 46)
+      (text 47)))
+
+  (text 48)
+
+  (SN-preparation
+    (text 49)
+    (NN-list
+      (SN-preparation
+        (text 50)
+        (NN-list
+          (text 51)
+          (text 52)))
+      (SN-preparation
+        (text 53)
+        (text 54))
+      (SN-preparation
+        (text 55)
+        (text 56))
+      (SN-preparation
+        (text 57)
+        (text 58)))))
+)
+```
+

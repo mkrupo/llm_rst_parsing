@@ -1,0 +1,315 @@
+I'll answer as a world-famous discourse analysis PhD and recipient of the Potsdam Discourse Structure Award.
+
+**TL;DR**: The text is a financial news digest with multiple independent stories. Each mini-story is analyzed separately. The main connective tissue is a global List relation grouping the independent pieces, with internal structures featuring Concession, Attribution, Elaboration, Reason, and Cause relations prominently.
+
+---
+
+Step-by-step discourse analysis and tree construction:
+
+First, I recognize this as a "market wrap-up" containing multiple independent news items. The overall structure is a multinuclear List joining the topical blocks. The final segment (49–58) is a table-like market summary, which itself forms a List of sub-categories.
+
+---
+
+### Block 1: Program trading (1–3)
+- (1) PROGRAM TRADING is being curbed by more securities firms,
+- (2) but big institutional investors are expected to continue the practice,
+- (3) further roiling the stock market.
+
+(2) is a Concession to (1): S (1) is the thesis with less importance, N (2) is what W identifies with more. (3) is a Result of (2): the continuation of program trading by big investors causes further market roiling. The concession relation is signaled by "but," and (3) is a participial result clause.
+
+```
+(SN-Concession
+  (text 1)
+  (NS-Result (text 2) (text 3)))
+```
+
+---
+
+### Block 2: Bear Stearns suspension & counterpoint (4–6)
+- (4) Bowing to criticism,
+- (5) Bear Stearns, Morgan Stanley and Oppenheimer joined PaineWebber in suspending stock-index arbitrage trading for their own accounts.
+- (6) Still, stock-index funds are expected to continue launching big programs through the market.
+
+(4) is Circumstance for (5): it provides the reason/manner framework (bowing to criticism) in which the suspension occurred. (6) is a Concession to (5): despite the suspension by these firms, stock-index funds will keep launching programs.
+
+```
+(SN-Circumstance
+  (text 4)
+  (SN-Concession (text 5) (text 6)))
+```
+
+---
+
+### Block 3: Big Board complaints (7–9)
+- (7) Several Big Board firms are organizing
+- (8) to complain about program trading and the exchange's role in it.
+- (9) The effort is being led by Contel.
+
+(8) is a Purpose relation to (7): organizing in order to complain. (9) is an E-Elaboration on the "effort" entity in (7,8), specifying who leads it.
+
+```
+(NS-E-Elaboration
+  (SN-Purpose (text 7) (text 8))
+  (text 9))
+```
+
+---
+
+### Block 4: Personal spending / income (10–13)
+- (10) Personal spending rose 0.2% in September, the smallest gain in a year.
+- (11) The slowdown raises questions about the economy's strength
+- (12) because spending fueled much of the third-quarter GNP growth.
+- (13) Meanwhile, personal income edged up 0.3%.
+
+(10) and the apposition "the smallest gain in a year" form a single EDU broken by an apposition; this is Same-unit internally, but we treat the text as given. The "the smallest gain" is an Interpretation of the 0.2% rise, shifting it to a framework of comparison.
+
+(11) is a Result of (10): the slowdown causes questions. (12) is a Reason for (11): explains why the slowdown raises questions (because spending fueled GNP growth). (13) is Contrast with (10)—spending vs. income, both economic indicators.
+
+```
+(NN-Contrast
+  (NS-Result
+    (SN-Interpretation (text 10) (text "the smallest gain in a year"))
+    (NS-Reason (text 11) (text 12)))
+  (text 13))
+```
+
+Given the TSV indexing, I need to handle (10) as a single fragment. "The smallest gain in a year" is an apposition inside (10), not a separate index, so I treat (10) as one unit:
+```
+(NN-Contrast
+  (NS-Result
+    (text 10)
+    (NS-Reason (text 11) (text 12)))
+  (text 13))
+```
+
+---
+
+### Block 5: Factory machinery / car sales (14–16)
+- (14) Factory owners are buying new machinery at a healthy rate this fall,
+- (15) machine-tool makers say.
+- (16) But weak car sales raise questions about future demand from the auto sector.
+
+(15) is an Attribution to (14): machine-tool makers are the source. (16) is a Concession/Contrast to (14–15): despite healthy machinery buying, weak car sales raise questions.
+
+```
+(NS-Attribution
+  (SN-Concession
+    (text 14)
+    (text 16))
+  (text 15))
+```
+
+---
+
+### Block 6: Southern / Gulf Power plea (17–19)
+- (17) Southern's Gulf Power unit may plead guilty this week to charges
+- (18) it illegally steered company money to politicians through third parties.
+- (19) The tentative pact would resolve part of a broad investigation of the Atlanta-based company in the past year.
+
+(18) is E-Elaboration on "charges" in (17): specifying the nature of the charges. (19) is an Interpretation of the plea (shifting it to a conceptual frame of "resolving investigation"), or alternatively Elaboration on the significance.
+
+```
+(NS-Interpretation
+  (NS-E-Elaboration (text 17) (text 18))
+  (text 19))
+```
+
+---
+
+### Block 7: LIN / BellSouth / McCaw (20–24)
+- (20) LIN Broadcasting and BellSouth sweetened their plan
+- (21) to merge cellular phone operations,
+- (22) offering LIN holders a special $42-a-share payout.
+- (23) But the new pact will force huge debt on the new firm
+- (24) and could still fail to thwart rival suitor McCaw Cellular.
+
+(21) is Purpose/E-Elaboration of the plan in (20). (22) is Elaboration/Means on how they sweetened the plan. (23)–(24) together form a Concession to (20–22): (20–22) is the positive S, (23)–(24) is the negative N that W emphasizes. Within (23–24), Conjunction joins two negative consequences.
+
+```
+(SN-Concession
+  (NN-List
+    (SN-E-Elaboration (text 20) (text 21))
+    (text 22))
+  (NN-Conjunction (text 23) (text 24)))
+```
+
+Better: (21) elaborates the plan, (22) is a means/result of the sweetening, so List is appropriate for the two details about the plan. Let me refine:
+
+```
+(SN-Concession
+  (SN-Purpose (text 20) (NN-List (text 21) (text 22)))
+  (NN-Conjunction (text 23) (text 24)))
+```
+
+Actually, (21) is what the plan is (merging ops), and (22) is an additional sweetener, so List works.
+
+---
+
+### Block 8: Unisys loss (25–28)
+- (25) Unisys posted a $648.2 million loss for the third quarter
+- (26) as it moved quickly to take write-offs for various problems and prepare for a turnaround.
+- (27) But some analysts wonder
+- (28) how strong the recovery will be.
+
+(26) is Circumstance/Cause for (25): the loss posting occurred in the context of/because of taking write-offs. (27) has Attribution: analysts wonder. (28) is the content of the wondering (Attribution N). (27–28) is Concession to (25–26): despite the write-offs and turnaround preparation, analysts doubt the recovery strength.
+
+```
+(SN-Concession
+  (SN-Circumstance (text 25) (text 26))
+  (SN-Attribution (text 27) (text 28)))
+```
+
+---
+
+### Block 9: RJR Nabisco candy sale (29–30)
+- (29) RJR Nabisco agreed to sell three candy businesses to Nestle for $370 million.
+- (30) The accord helps RJR pay off debt and boosts Nestle's 7% share of the U.S. candy market to 12%.
+
+(30) is a Result of (29): the accord causes the help with debt and market share boost. Inside (30), Conjunction joins the two benefits.
+
+```
+(NS-Result
+  (text 29)
+  (text 30))
+```
+
+---
+
+### Block 10: GM / Ford / Jaguar stakes (31–35)
+- (31) GM and Ford are expected to go head to head in the markets
+- (32) to buy up rival 15% stakes in Jaguar.
+- (33) GM confirmed
+- (34) it received U.S. antitrust clearance to
+- (35) boost its holding.
+
+(32) is Purpose for (31): going head to head in order to buy stakes. (34) is the content of Attribution (33). (35) is Purpose of the clearance in (34). (33–35) is Elaboration/Evidence for (31–32), providing a concrete example of GM acting on this competition.
+
+```
+(NS-Elaboration
+  (SN-Purpose (text 31) (text 32))
+  (SN-Attribution (text 33) (SN-Purpose (text 34) (text 35))))
+```
+
+---
+
+### Block 11: Sansui / Polly Peck (36–40)
+- (36) Sansui Electric agreed to sell a 51% stake to Polly Peck of Britain for $110 million.
+- (37) Still,
+- (38) analysts said
+- (39) the accord doesn't suggest
+- (40) Japan is opening up to more foreign takeovers.
+
+(38–40): (38) is Attribution source, (39) is reporting verb frame, (40) is the content N of what it doesn't suggest (embedded Attribution). (36) is S, and (37–40) is N forming Concession: despite the stake sale, analysts downplay its significance.
+
+```
+(SN-Concession
+  (text 36)
+  (SN-Attribution
+    (text 38)
+    (SN-Attribution (text 39) (text 40))))
+```
+
+---
+
+### Block 12: Kellogg cereal plant (41–43)
+- (41) Kellogg suspended work on a $1 billion cereal plant,
+- (42) indicating a pessimistic outlook by the cereal maker,
+- (43) which has been losing market share.
+
+(42) is an Interpretation of (41): the suspension indicates pessimism. (43) is a Reason for (42) / E-Elaboration on the cereal maker: explains why the outlook is pessimistic (losing market share).
+
+```
+(NS-Interpretation
+  (text 41)
+  (NS-Reason (text 42) (text 43)))
+```
+
+---
+
+### Block 13: Earthquake insurance (44)
+- (44) Insurers could see claims totaling nearly $1 billion from the San Francisco earthquake, far less than the $4 billion from Hurricane Hugo.
+
+This is a single unit with internal Contrast via "far less than." As one EDU, no internal bracketing.
+
+---
+
+### Block 14: Nashua poison pill (45–47)
+- (45) Nashua strengthened its poison-pill plan
+- (46) after announcing
+- (47) a Dutch firm is seeking to buy up to 25% of the New Hampshire copier company.
+
+(46) is Circumstance for (45): the strengthening happened after the announcing. (47) is the content of Attribution (46): what was announced.
+
+```
+(SN-Circumstance
+  (text 45)
+  (SN-Attribution (text 46) (text 47)))
+```
+
+---
+
+### Block 15: Mobil cutback (48)
+- (48) Mobil is cutting back its U.S. oil and gas exploration and production group by up to 15% as part of a restructuring of the business.
+
+Single unit with internal Purpose relation ("as part of"), but one EDU index.
+
+---
+
+### Block 16: Markets summary (49–58)
+- (49) Markets ---
+- (50) Stocks:
+- (51) Volume 170,330,000 shares. Dow Jones industrials 2596.72, off 17.01; transportation 1190.43, off 14.76; utilities 215.86, up 0.19.
+- (53) Bonds: Shearson Lehman Hutton Treasury index 3406.31, off
+- (55) Commodities: Dow Jones futures index 129.49, up 0.27; spot index 130.80, off 0.24.
+- (57) Dollar: 141.65 yen, off 0.45; 1.8300 marks, off 0.0100.
+
+(49) is Preparation for the market data. (50, 53, 55, 57) are List elements (Stocks, Bonds, Commodities, Dollar). (51) elaborates (50); (54) elaborates (53); (56) elaborates (55); (58) elaborates (57). Note: indices 52, 54, 56, 58 are continuations, treated as parts of their respective categories.
+
+The TSV has:
+- 50 Stocks: → 51 (Volume...), 52 (Dow Jones...)
+- 53 Bonds: → 54 (Shearson...)
+- 55 Commodities: → 56 (Dow futures...)
+- 57 Dollar: → 58 (141.65 yen...)
+
+(51) and (52) form a List under Stocks. Each category label (50,53,55,57) serves as Preparation for the data that follows.
+
+```
+(SN-Preparation
+  (text 49)
+  (NN-List
+    (SN-Preparation (text 50) (NN-List (text 51) (text 52)))
+    (SN-Preparation (text 53) (text 54))
+    (SN-Preparation (text 55) (text 56))
+    (SN-Preparation (text 57) (text 58))))
+```
+
+---
+
+### Global structure
+
+The entire text is a List of the 16 blocks, joined as independent news items in a market wrap-up:
+
+```
+(NN-List
+  (SN-Concession (text 1) (NS-Result (text 2) (text 3)))
+  (SN-Circumstance (text 4) (SN-Concession (text 5) (text 6)))
+  (NS-E-Elaboration (SN-Purpose (text 7) (text 8)) (text 9))
+  (NN-Contrast (NS-Result (text 10) (NS-Reason (text 11) (text 12))) (text 13))
+  (NS-Attribution (SN-Concession (text 14) (text 16)) (text 15))
+  (NS-Interpretation (NS-E-Elaboration (text 17) (text 18)) (text 19))
+  (SN-Concession (SN-Purpose (text 20) (NN-List (text 21) (text 22))) (NN-Conjunction (text 23) (text 24)))
+  (SN-Concession (SN-Circumstance (text 25) (text 26)) (SN-Attribution (text 27) (text 28)))
+  (NS-Result (text 29) (text 30))
+  (NS-Elaboration (SN-Purpose (text 31) (text 32)) (SN-Attribution (text 33) (SN-Purpose (text 34) (text 35))))
+  (SN-Concession (text 36) (SN-Attribution (text 38) (SN-Attribution (text 39) (text 40))))
+  (NS-Interpretation (text 41) (NS-Reason (text 42) (text 43)))
+  (text 44)
+  (SN-Circumstance (text 45) (SN-Attribution (text 46) (text 47)))
+  (text 48)
+  (SN-Preparation (text 49)
+    (NN-List
+      (SN-Preparation (text 50) (NN-List (text 51) (text 52)))
+      (SN-Preparation (text 53) (text 54))
+      (SN-Preparation (text 55) (text 56))
+      (SN-Preparation (text 57) (text 58)))))
+```

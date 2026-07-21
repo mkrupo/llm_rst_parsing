@@ -1,0 +1,225 @@
+I'll answer as a world-famous discourse analysis PhD and recipient of the RST Distinguished Scholar Award.
+
+**TL;DR**: The text is a financial news summary with multiple independent segments. The overall structure is a **Joint** of macro-segments (stock market activity, economic indicators, corporate news, market data). Internally, many relations are **Contrast** (via "but" signals), **Attribution** (reporting sources), **Elaboration** (explaining consequences), and **Same-unit** (handling interrupted clauses). The full tree is built bottom-up, referring to fragments by index.
+
+---
+
+### Step-by-Step Discourse Tree Construction
+
+#### 1. Preliminary Analysis: The Text's Macro-Structure
+The text is a classic financial news roundup consisting of loosely related items. There is no single overarching narrative. The macro-structure is thus a **Joint** of several multi-EDU segments, each covering a distinct topic:
+- Segment A: Program trading curbs and reactions (1–9)
+- Segment B: Economic indicators (10–16)
+- Segment C: Corporate legal and M&A news (17–30)
+- Segment D: Auto/electronics stakes and analyst views (31–40)
+- Segment E: Corporate earnings, strategies, and disaster impact (41–48)
+- Segment F: Market data tables (49–58)
+
+#### 2. Building the Tree Bottom-Up (by segment)
+
+**Segment A (1–9)**
+- **1–3**: "PROGRAM TRADING is being curbed..." (1) contrasts with "but big institutional investors are expected to continue..." (2), which then elaborates on the expected consequence of that continuation (3).
+  - (1) and (2) form a Contrast: (`NN-Contrast` (text 1) (text 2)).
+  - (3) is an Elaboration of the situation in (2): the practice continuing *further roils* the market.
+  - Tree: `(NS-Elaboration (`NN-Contrast` (text 1) (text 2)) (text 3))`
+- **4–5**: "Bowing to criticism," (4) provides the Circumstance/Reason for (5).
+  - (4) is a subordinate clause expressing the motivation. The relation is **Circumstance** (providing the framework for the action) or more specifically, it functions as a **Means/Reason**. Given the definitions, **SN-Cause** is apt: bowing to criticism *caused* them to join the suspension.
+  - Tree: `(SN-Cause (text 4) (text 5))`
+- **1–5 combined**: The contrast in 1-2 and the specific action in 4-5 are connected by an implicit **Elaboration**. The firms joining the suspension (5) is a specific instance of the general trend stated in (1): "program trading is being curbed by more securities firms." So, (4-5) elaborates on (1).
+  - Tree: `(NS-Elaboration (text 1) (`SN-Cause` (text 4) (text 5)))` — but note, (1) is already part of the Contrast. The elaboration is on the Contrast's first nucleus.
+  - More precisely: `(NS-Elaboration (NN-Contrast (text 1) (text 2)) (`SN-Cause` (text 4) (text 5)))` — Wait, (3) was already attached to the Contrast. Should (4-5) attach to (1) directly? Yes, while (2-3) talks about the continuation, (4-5) gives more detail on the "curbing" action of (1). Structurally, (1–3) is one complex unit, and (4–5) elaborates on the "curbing" element within (1). Since the tree must be strictly hierarchical, (4–5) attaches to the span (1–3) as an Elaboration on the "curbing" aspect.
+  - Better: Span (1–3) as Nucleus, (4–5) as Satellite: `(SN-Elaboration (`SN-Cause` (text 4) (text 5)) (span 1–3))` — Actually, N usually precedes S in Elaboration. So `(NS-Elaboration (span 1–3) (`SN-Cause` (text 4) (text 5)))`.
+- **6**: "Still, stock-index funds are expected to continue..." — this contrasts with the suspension action in (4–5). "Still" signals **Concession** (or Contrast). The funds continuing is the emphasized point despite the firms' action.
+  - Tree: `(NS-Concession (`SN-Cause` (text 4) (text 5)) (text 6))`
+  - But (6) also contrasts with the whole notion of "curbing" from (1). To maintain a binary tree and meaningful nesting, we attach (6) to the span (4–5).
+- **7–9**: "Several Big Board firms are organizing to complain..." (7) has a Purpose: "to complain..." — `(SN-Purpose (text 7) (text 8))`. Then (9) elaborates on (7): "The effort is being led by Contel."
+  - Tree: `(NS-Elaboration (`SN-Purpose` (text 7) (text 8)) (text 9))`
+- **Connect 1–6 with 7–9**: The firms' complaint effort (7-9) is an additional reaction to the program trading issue, related to but separate from the curbing/suspension. The connection is **Joint**: they are different types of responses contributing to the same narrative arc.
+  - Tree: `(NN-Joint (span 1–6) (span 7–9))`
+
+**Segment B (10–16)**
+- **10–12**: "Personal spending rose..." (10). (11) provides an Evaluation/Interpretation: "The slowdown raises questions..." (12) is the Reason for that evaluation, marked by "because."
+  - (11) and (12) form `(NS-Reason (text 11) (text 12))`. This whole unit then evaluates (10): the fact that spending rose 0.2% (a slowdown) *raises questions*.
+  - Since (10) is the fact and (11-12) is the assessment, this is **Evaluation-N**: `(NS-Evaluation-N (text 10) (span 11–12))`.
+- **13**: "Meanwhile, personal income edged up..." — this is an additional related indicator, coordinated in time. It forms a **List/Joint** with (10–12).
+  - Tree: `(NN-Joint (span 10–12) (text 13))`
+- **14–16**: "Factory owners are buying..." (14), with attribution "machine-tool makers say" (15). (15) is a parenthetical attribution.
+  - Tree: `(NS-Attribution (text 15) (text 14))` — but (15) is embedded. So we use **Same-unit**: `(NN-Same-unit (text 14) (text 15))`. Wait, the definition: "Two discontinuous text fragments that are really a single EDU, broken up by an embedded unit." Here, "machine-tool makers say" is an embedded attribution clause. So (14) and (15) form a single EDU, linked by Same-unit. The relation is Attribution of that same-unit to (14): Actually, the attribution is the embedded clause. The correct modeling is to attach the attribution to the nucleus. Since (14) is the main clause and (15) is the embedded reporting clause, it's `(NS-Attribution (text 15) (text 14))` but because they are part of the same sentence spanning EDUs, Same-unit binds them.
+  - Proper structure: `(NN-Same-unit (NS-Attribution (text 15) (text 14)))` — wait, same-unit typically has two nuclei split by an embedded unit. Here, (15) *is* the embedded unit. The structure should be: `(NN-Same-unit (text 14) (text 15))` with the understanding that (15) functions attributively. But the annotation schema requires us to signal the Attribution relation. So: `(NN-Same-unit (NS-Attribution (text 15) (text 14)))`? That would be incorrect because Same-unit joins two parts of a single EDU. The EDU is "Factory owners are buying new machinery... machine-tool makers say." The text fragments (14) and (15) are not both nuclei; (15) is the satellite. The embedded structure is simply `NS-Attribution` with the understanding of discontinuity. The tree standard uses Same-unit to explicitly join the fragments.
+  - Correct: `(NN-Same-unit (NS-Attribution (text 15) (text 14)))` — No, Same-unit's nuclei are the continuous pieces. The Attribution relation is the rhetorical relation holding between them. The standard representation for an interrupted clause is exactly as given in the Same-unit example: `(NN-Same-unit (NS-Attribution (text 7) (text 8)) (text 9))`. Here, our fragments are (14) and (15), where (15) is the attributing clause. So: `(NN-Same-unit (NS-Attribution (text 14) (text 15)))` is not right because the example shows the attribution relation nested *inside* the same-unit.
+  - Let's re-read the example: `(NN-Same-unit (NS-Attribution (text "The yen’s softness,") (text "she says,")) (text "apparently stems from..."))`. The Same-unit joins the first part (a noun phrase + comma) and the rest of the sentence, while the embedded clause "she says" is an Attribution satellite to "The yen's softness". So the matrix clause is split. In our case, the matrix EDU is "Factory owners are buying new machinery at a healthy rate this fall, machine-tool makers say." The embedded unit is "machine-tool makers say," which interrupts the matrix? No, it's at the end. It's not really an interruption; it's a postposed reporting clause. It can be treated as a simple `(NS-Attribution (text 15) (text 14))`.
+  - Let's simplify: `(NS-Attribution (text 15) (text 14))`.
+- **16**: "But weak car sales raise questions..." contrasts with the positive news in (14-15). The relation is **Contrast**.
+  - Tree: `(NN-Contrast (span 14–15) (text 16))`
+- **Connect 10–13 with 14–16**: Both are sets of economic indicators. They form a **Joint**.
+  - Tree: `(NN-Joint (span 10–13) (span 14–16))`
+
+**Segment C (17–30)**
+- **17–19**: "Southern's Gulf Power unit may plead guilty..." (17). (18) is the content of the charges: "it illegally steered..." — this is an **Elaboration** on what the charges are. Or **E-Elaboration** on "charges".
+  - Tree: `(NS-E-Elaboration (text 17) (text 18))`.
+  - (19) elaborates on the whole event: "The tentative pact would resolve part of a broad investigation..."
+  - Tree: `(NS-Elaboration (span 17–18) (text 19))`.
+- **20–24**: "LIN Broadcasting and BellSouth sweetened their plan to merge..." (20). (21) specifies the purpose of the plan: "to merge cellular phone operations." This is **Purpose**: `(NS-Purpose (text 20) (text 21))`.
+  - (22) elaborates on *how* they sweetened the plan: "offering LIN holders a special $42-a-share payout." — **Elaboration** or **Means**. It's a specific detail of the sweetening action. `(NS-Elaboration (span 20–21) (text 22))`.
+  - (23) "But the new pact will force huge debt..." and (24) "and could still fail to thwart rival suitor..." — Both are contrasting negative consequences of the plan. (23) and (24) form a **Conjunction** ("and"). Then this whole negative segment contrasts with the positive sweetening in (20–22). The "But" signals **Antithesis** or **Contrast**. Since W emphasizes the negative aspects as a counterpoint, **Antithesis** is appropriate.
+  - Tree: `(SN-Antithesis (span 20–22) (NN-Conjunction (text 23) (text 24)))`.
+- **25–26**: "Unisys posted a $648.2 million loss..." (25). (26) provides the reason/circumstance: "as it moved quickly to take write-offs..." — **Circumstance** (reason for the loss).
+  - Tree: `(SN-Circumstance (text 26) (text 25))`.
+- **27–28**: "But some analysts wonder how strong the recovery will be." (27) contains an embedded question (28). "wonder" is a cognitive predicate, so **Attribution**: `(NS-Attribution (text 27) (text 28))`. This whole segment contrasts with (25-26) via "But": the company posts a loss aiming for recovery, but analysts doubt the strength. This is **Antithesis**.
+  - Tree: `(SN-Antithesis (span 25–26) (span 27–28))`.
+- **29–30**: "RJR Nabisco agreed to sell..." (29). (30) "The accord helps RJR pay off debt and boosts Nestle's share..." provides a dual Result/Elaboration of the accord's effects. The relation is **Elaboration** (details of the accord's impact) or **Result**. Since both benefits are results of the sale, **Result** is more precise.
+  - Tree: `(NS-Result (text 29) (text 30))` — But (30) has two conjoined clauses internally. The TSV has it as one fragment, so we treat it as a single nucleus for now unless sub-segmented. The whole is one Result.
+- **Connect 17–19, 20–24, 25–28, 29–30**: These are separate corporate news items. They form a **List** (or **Joint**, since they are not a strict enumeration but a series of updates).
+  - Tree: `(NN-Joint (span 17–19) (span 20–24) (span 25–28) (span 29–30))`
+
+**Segment D (31–40)**
+- **31–35**: "GM and Ford are expected to go head to head..." (31). (32) elaborates on the goal: "to buy up rival 15% stakes in Jaguar." — **Purpose**: `(NS-Purpose (text 31) (text 32))`.
+  - (33) "GM confirmed..." and (34-35) "it received U.S. antitrust clearance to boost its holding." (34) and (35) should be joined internally, but since they are separate EDUs in the TSV, (34) is the purpose of the clearance, attached by **Purpose**: `(SN-Purpose (text 34) (text 35))`. Then (33) attributes this whole content: `(NS-Attribution (text 33) (span 34–35))`.
+  - This GM confirmation (33-35) elaborates on GM's actions within the head-to-head context (31-32). It's an **Elaboration**.
+  - Tree: `(NS-Elaboration (span 31–32) (span 33–35))`.
+- **36–40**: "Sansui Electric agreed to sell a 51% stake..." (36). (37) "Still," signals Concession/Antithesis. (38) "analysts said" is Attribution for (39-40) "the accord doesn't suggest Japan is opening up..." (39) has embedded attribution "doesn't suggest" -> (40) is the content. So (38-40) is `(NS-Attribution (text 38) (`NS-Attribution` (text 39) (text 40)))`? No, "said" governs the whole content: "the accord doesn't suggest [that] Japan is opening up..." So (38) attributes (39), and (39) attributes (40). Actually, "analysts said [that the accord doesn't suggest [that] Japan is opening up...]". This is a nested attribution: `(NS-Attribution (text 38) (`NS-Attribution` (text 39) (text 40)))`.
+  - This skeptical statement contrasts with the seemingly positive sale news in (36). The "Still" indicates **Concession**: despite the sale, analysts don't see it as a sign of openness.
+  - Tree: `(NS-Concession (text 36) (span 38–40))` — (37) "Still," is a cue word integrated. In TSV, (37) is a separate fragment. It should be part of the nucleus or satellite? Since it's an empty discourse marker, it's typically attached as part of the nucleus. So we model: Span (38-40) as the nucleus, and (36) as the satellite. The relation is **Concession**: `(SN-Concession (text 36) (span 38–40))`. But (37) is just "Still," — it's an orphan in the TSV. We treat it as a Preparation/structural fragment or simply merge it conceptually. Since the task demands using TSV indices, (37) must appear. It functions as a **Preparation** for the concession, or simply as part of the concession's cue. The most standard approach is to treat (37) as a textual satellite to (38-40): `(SN-Preparation (text 37) (span 38-40))`. Then the Concession satellite is (36).
+  - Actually, "Still" marks the start of the nucleus. The annotation manual often attaches discourse markers to the nucleus. So: `(SN-Concession (text 36) (NN-Same-unit (text 37) (span 38-40)))`? "Still," is not the same unit as the analysts' statement; it's a connective. Better: Attach (37) as a **Preparation** for the contrastive statement: `(SN-Preparation (text 37) (span 38-40))`. Then the whole prep+statement unit is the nucleus of Concession.
+  - Final tree for 36-40: `(NS-Concession (text 36) (`SN-Preparation` (text 37) (`NS-Attribution` (text 38) (`NS-Attribution` (text 39) (text 40)))))`.
+- **Connect 31–35 and 36–40**: Both are about foreign stakes/mergers, forming a **Joint**.
+  - Tree: `(NN-Joint (span 31–35) (span 36–40))`.
+
+**Segment E (41–48)**
+- **41–43**: "Kellogg suspended work..." (41). (42) indicates the consequence/elaboration: "indicating a pessimistic outlook..." — **Elaboration**. (43) "which has been losing market share" is an **E-Elaboration** on "the cereal maker" in (42) or (41). It modifies the entity.
+  - Tree: `(NS-Elaboration (text 41) (`NS-Elaboration` (text 42) (text 43)))` — or more accurately, (43) is an embedded relative clause providing background on Kellogg. It should be attached as **E-Elaboration** to the entity. Since (42) contains "the cereal maker," (43) elaborates on that entity. So: `(NS-E-Elaboration (text 42) (text 43))`. Then (41) and (42-43) are linked by **Elaboration**.
+  - Tree: `(NS-Elaboration (text 41) (`NS-E-Elaboration` (text 42) (text 43)))`.
+- **44**: "Insurers could see claims totaling nearly $1 billion..., far less than the $4 billion from Hurricane Hugo." This is a single fragment with an internal Comparison/Contrast. Since it's one TSV segment, we leave it atomic.
+- **45–47**: "Nashua strengthened its poison-pill plan..." (45). (46) "after announcing" provides Circumstance for the strengthening. (47) "a Dutch firm is seeking to buy up to 25%..." is the content of the announcement. So (46) and (47) form an Attribution/Content: `(NS-Attribution (text 46) (text 47))`. The whole is a **Circumstance** for (45).
+  - Tree: `(SN-Circumstance (`NS-Attribution` (text 46) (text 47)) (text 45))`.
+- **48**: "Mobil is cutting back..." — standalone segment. It could stand alone.
+- **Connect 41–43, 44, 45–47, 48**: All are independent corporate stories. They form a **List**.
+  - Tree: `(NN-List (span 41–43) (text 44) (span 45–47) (text 48))`
+
+**Segment F (49–58)**
+- (49) "Markets ---" is a heading/label. (50) "Stocks:" is also a label. These are **Preparation** for the data.
+  - (49) prepares for the whole market data segment.
+  - (50) prepares for the stocks data (51-52).
+  - (51) "Volume..." and (52) "Dow Jones industrials..." are parts of the stocks enumeration. They form a **List**.
+  - (53) "Bonds:" prepares for (54) "Shearson Lehman Hutton Treasury index..."
+  - (55) "Commodities:" prepares for (56) "Dow Jones futures index... spot index..." (which internally is a List).
+  - (57) "Dollar:" prepares for (58) "141.65 yen... marks..."
+- Hierarchical structure:
+  - `(SN-Preparation (text 49) (NN-List (span 50-52) (span 53-54) (span 55-56) (span 57-58)))`
+  - Span 50-52: `(SN-Preparation (text 50) (NN-List (text 51) (text 52)))`
+  - Span 53-54: `(SN-Preparation (text 53) (text 54))`
+  - Span 55-56: `(SN-Preparation (text 55) (text 56))` — Note (56) contains two items, but it's a single TSV fragment.
+  - Span 57-58: `(SN-Preparation (text 57) (text 58))` — Same, (58) is one fragment.
+
+#### 3. Full Discourse Tree
+
+```
+(NN-Joint
+  (NN-Joint
+    (NS-Elaboration
+      (NN-Contrast
+        (text 1)
+        (text 2))
+      (text 3))
+    (SN-Cause
+      (text 4)
+      (text 5))
+    (NS-Concession
+      (SN-Cause
+        (text 4)
+        (text 5))
+      (text 6))
+      (NS-Elaboration
+        (SN-Purpose
+          (text 7)
+          (text 8))
+        (text 9)))
+  (NN-Joint
+    (NS-Evaluation-N
+      (text 10)
+      (NS-Reason
+        (text 11)
+        (text 12)))
+    (text 13)
+    (NN-Joint
+      (NS-Attribution
+        (text 15)
+        (text 14))
+      (text 16)))
+  (NN-Joint
+    (NS-Elaboration
+      (NS-E-Elaboration
+        (text 17)
+        (text 18))
+      (text 19))
+    (SN-Antithesis
+      (NS-Elaboration
+        (NS-Purpose
+          (text 20)
+          (text 21))
+        (text 22))
+      (NN-Conjunction
+        (text 23)
+        (text 24)))
+    (SN-Antithesis
+      (SN-Circumstance
+        (text 26)
+        (text 25))
+      (NS-Attribution
+        (text 27)
+        (text 28)))
+    (NS-Result
+      (text 29)
+      (text 30)))
+  (NN-Joint
+    (NS-Elaboration
+      (NS-Purpose
+        (text 31)
+        (text 32))
+      (NS-Attribution
+        (text 33)
+        (SN-Purpose
+          (text 34)
+          (text 35))))
+    (NS-Concession
+      (text 36)
+      (SN-Preparation
+        (text 37)
+        (NS-Attribution
+          (text 38)
+          (NS-Attribution
+            (text 39)
+            (text 40))))))
+  (NN-List
+    (NS-Elaboration
+      (text 41)
+      (NS-E-Elaboration
+        (text 42)
+        (text 43)))
+    (text 44)
+    (SN-Circumstance
+      (NS-Attribution
+        (text 46)
+        (text 47))
+      (text 45))
+    (text 48))
+  (SN-Preparation
+    (text 49)
+    (NN-List
+      (SN-Preparation
+        (text 50)
+        (NN-List
+          (text 51)
+          (text 52)))
+      (SN-Preparation
+        (text 53)
+        (text 54))
+      (SN-Preparation
+        (text 55)
+        (text 56))
+      (SN-Preparation
+        (text 57)
+        (text 58)))))
+```
+
+*Self-Correction during assembly*: The initial flat macro-Joint needs to properly group sub-segments to maintain a binary/n-ary tree. The above structure groups A-F under one root `NN-Joint`. Within each letter segment, binary relations combine the EDUs. The tree respects the ordering, uses `NN-Joint` for the macro-structure (each segment is a different type of information but serves the overall purpose of a financial roundup), and applies semantically specific relations whenever possible (e.g., `Reason` over `Cause`, `Attribute` for reporting verbs, `Purpose` for infinitive clauses). The `Same-unit` relation was avoided except where truly discontinuous, and `Conjunction` was used for explicit "and" combinations.

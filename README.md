@@ -175,6 +175,12 @@ Install the core dependencies:
 pip install torch transformers accelerate datasets pyyaml pandas numpy scipy scikit-learn krippendorff tqdm matplotlib
 ```
 
+Or install the pinned dependency set used by this repository:
+
+```bash
+pip install -r requirements.txt
+```
+
 Optional steering and circuit experiments may require additional dependencies from the external repositories.
 
 ## Running the core benchmark
@@ -328,6 +334,31 @@ python -m src.optional_cudr_bridge \
 ```
 
 This is intended only as an auxiliary relation-family bridge. It is not part of the core benchmark.
+
+## Optional RST-Tace tree evaluation
+
+The repository includes RST-Tace as a Git dependency in `requirements.txt` for comparing `.rs3` RST trees. RST-Tace reports constituent, attachment, nuclearity, and relation agreement between two trees or two directories of matching trees.
+
+After installing dependencies, compare two converted `.rs3` trees with:
+
+```bash
+mkdir -p results/rsttace
+rsttace compare \
+  results/rs3/gold/doc_001.rs3 \
+  results/rs3/rstweb_e2e/doc_001.rs3 \
+  -o results/rsttace/
+```
+
+For batch comparison, place gold and predicted trees in separate directories with matching filenames:
+
+```bash
+rsttace compare \
+  results/rs3/gold/ \
+  results/rs3/rstweb_e2e/ \
+  -o results/rsttace/
+```
+
+RST-Tace writes per-file comparison tables and metrics, plus overall metrics for directory comparisons.
 
 ## End-to-end ICL parsing through an OpenAI-compatible API
 

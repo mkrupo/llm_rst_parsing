@@ -13,3 +13,5 @@ matplotlib
 openai
 nltk
 rstconverter
+git+https://github.com/tkutschbach/RST-Tace.git
+git+https://github.com/ruthenian8/rst-converter-service.git

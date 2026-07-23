@@ -217,8 +217,8 @@ Allowed to have more than one child if joining several same-level text units.
 
 ### same-unit
 **N:**  Two discontinuous text fragments that are really a single EDU, but which are broken up by an embedded unit, often an apposition. 
+- **Remark:** A pseudo-relation. Examples of embedded units that can break up other EDUs include: relative clauses, other nominal postmodifiers, parentheticals, participial clauses, etc. The embedded unit is joined with part 1 or 2 using the appropriate relation. This resulting span is then joined with the other part using same-unit.
 **Example:** (NN-same-unit (NS-attribution (text "The yen’s softness,") (text "she says,")) (text "apparently stems from Japanese investors’ interest"))
-- **Remark:** A pseudo-relation. Examples of embedded units that can break up other EDUs include: relative clauses, other nominal postmodifiers, parentheticals, participial clauses, etc.
 
 ### contrast
 - **N:** Exactly two nuclei. Both are of equal importance for W’s purposes. The contents are comparable yet not identical. They differ in aspects that are important to W.

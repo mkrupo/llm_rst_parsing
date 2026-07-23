@@ -19,24 +19,24 @@ Use relation definitions to validate nuclearity.
 If several adjacent spans play the same role with respect to a larger segment, then
     if they are explicitly linked by coordinating connectives such as "and", "or",
     "also", or "in addition"
-        assign CONJUNCTION
+        assign conjunction
     else
-        assign LIST
+        assign list
 ```
 
 ```text
 If the omission test indicates that neither span is more nuclear, then
     if the spans describe states of affairs in temporal order
-        assign SEQUENCE
+        assign sequence
     else if exactly two spans are comparable but differ in writer-relevant respects
-        assign CONTRAST
+        assign contrast
     else if the spans enumerate comparable information
         if there is a coordinating connective
-            assign CONJUNCTION
+            assign conjunction
         else
-            assign LIST
+            assign list
     else
-        assign JOINT
+        assign joint
 ```
 
 ```text
@@ -47,126 +47,126 @@ test primarily pragmatic relations before semantic ones.
 ```text
 If S makes it easier for R to understand N, especially by providing necessary
 prior/topic information, then
-    assign BACKGROUND
+    assign background
 ```
 
 ```text
 Else if the relation is adversative, contrastive, or expectation-violating, then
     if neither span is more nuclear by the omission test
-        assign CONTRAST
+        assign contrast
     else if S is acknowledged as true/valid but N still holds against expectation
-        assign CONCESSION
+        assign concession
     else if S is the rejected or less important thesis and W identifies with N
-        assign ANTITHESIS
+        assign antithesis
 ```
 
 ```text
 Else if S supports a subjective claim, thesis, or evaluation in N, then
     if S is presented as objective fact, observation, or acceptable evidence
-        assign EVIDENCE
+        assign contrast
     else if S is also a subjective claim/thesis by W
-        assign REASON
+        assign reason
     else if S supports W’s right to present N or gives a basic justificatory stance
-        assign JUSTIFY
+        assign justify
 ```
 
 ```text
 Else if the support relation runs in the other direction,
 and the omission test shows that the supporting/reason-giving span is more nuclear,
-    assign REASON-N
+    assign reason-N
 ```
 
 ```text
 Else if one span evaluates the other from W’s perspective, then
     if the evaluation is omissible and the evaluated material remains central
-        assign EVALUATION-S
+        assign evaluation-S
     else if the evaluation is the central point and the evaluated material is supporting
-        assign EVALUATION-N
+        assign evaluation-N
 ```
 
 ```text
 Else if N is an action to be performed by the reader, then
     if S increases R’s desire to perform N
-        assign MOTIVATION
+        assign motivation
     else if S increases R’s ability to perform N
-        assign ENABLEMENT
+        assign enablement
 ```
 
 ```text
 Else if the relation involves unrealized, hypothetical, future, or potential situations, then
     if N is an activity/action and S is the unrealized goal achieved through N
-        assign PURPOSE
+        assign purpose
     else if realizing N prevents or impedes realizing S
-        assign OTHERWISE
+        assign otherwise
     else if N is realized only if S is not realized
-        assign UNLESS
+        assign unless
     else if realization of N depends on realization of S
-        assign CONDITION
+        assign condition
 ```
 
 ```text
 Else if the relation is factive causality, then
     if S causes N and the omission test makes N central
-        assign CAUSE
+        assign cause
     else if N causes S and the omission test makes N central
-        assign RESULT
+        assign result
 ```
 
 ```text
 Else if N is an activity/action and S gives the instrument, method, or way
 that makes N possible or easier, then
-    assign MEANS
+    assign means
 ```
 
 ```text
 Else if S presents a problem and N presents a solution, then
-    assign SOLUTIONHOOD
+    assign solutionhood
 ```
 
 ```text
 Else if S provides an actual temporal, locative, or situational framework
 for interpreting N, then
-    assign CIRCUMSTANCE
+    assign circumstance
 ```
 
 ```text
 Else if S shifts N into a different conceptual frame without primarily evaluating it, then
-    assign INTERPRETATION
+    assign interpretation
 ```
 
 ```text
 Else if S provides detail or more information about N, then
     if S elaborates a single entity mentioned in N
-        assign E-ELABORATION
+        assign e-elaboration
     else
-        assign ELABORATION
+        assign elaboration
 ```
 
 ```text
 Else if the relation is mainly textual or organizational, then
     if S precedes N and merely orients R toward N
-        assign PREPARATION
+        assign preparation
     else if S repeats N with different wording and roughly equal size
-        assign RESTATEMENT
+        assign restatement
     else if S follows a multi-EDU N and gives a shorter restatement
-        assign SUMMARY
+        assign summary
 ```
 
 ```text
 Else
     if both spans are equally important
-        assign JOINT
+        assign joint
     else
         choose the most informative applicable relation rather than a vague one.
 ```
 
 bracketed tree example:
 ```
-(SN-Evaluation
+(SN-evaluation
         (text 1)
-        (NS-Evaluation
-          (SN-Cause (text 2) (NN-Joint (text 3) (text 4)))
-          (NS-Cause (text 5) (text 6))))
+        (NS-evaluation
+          (SN-cause (text 2) (NN-joint (text 3) (text 4)))
+          (NS-cause (text 5) (text 6))))
 ```
 
 ```tsv

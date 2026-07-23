@@ -1,137 +1,201 @@
 Based on the definitions, analyze the target text (tsv-formatted) and build a bracketed discourse tree end-to-end. Refer to text fragments by their index. Ensure the correct formatting of the tree. Prefer semantically specific relations to semantically generic relations.
 
-### Antithesis
+### attribution
+**Definition:** The S is the source of the attribution (a clause containing a reporting verb, or a phrase beginning with according to), and the N is the content of the reported message (which must be in a separate clause). The attribution relation is also used with cognitive predicates, to include feelings, thoughts, hopes, etc.
+- **Example:** (SN-attribution (text "The legendary GM chairman declared") (text "that his company would make “a car for every purse and purpose.”")) (wsj_1377) (NS-attribution (text "The shares represented 66% of his Dun & Bradstreet holdings,") (text "according to the company.")) (wsj_1157)
+- **Remark:** Instances of reported speech, both direct and indirect, should be marked for the rhetorical relation of attribution.
+
+### antithesis
 - **N:** W regards N positively and identifies with it.
 - **S:** W regards S as less important or rejects it.
 - **N/S:** N and S are incompatible, and recognizing the contrast increases R's positive regard for N.
-- **Example:** (SN-Antithesis (text "At one point they seemed to have succeeded.") (text "But the buyer did not pay."))
+- **Example:** (SN-antithesis (text "At one point they seemed to have succeeded.") (text "But the buyer did not pay."))
 
-### Background
-- **N/S:** Understanding S makes it easier for R to understand N by supplying relevant prior or general information.
+### background
+- **N:** on N: R won't comprehend N sufficiently before reading text of S 
+- **N/S:** S increases the ability of R to comprehend an element in N 
 - **Effect:** R's ability to comprehend N is increased.
-- **Example:** (SN-Background (text "Until 1984, Burkina Faso was called Obervolta.") (text "Many Europeans believe they are two countries."))
+- **Example:** (SN-background (text "ZPG's 1985 Urban Stress Test, 11B) created after months of persistent and exhaustive research, 11A) is the nation's first survey of how population-linked pressures affect U.S. cities.") (text "The Urban Stress Test translates complex, technical data into an easy-to-use action tool"))
+- **Remark:** Background information is general information of any sort that is likely to help the reader to understand the nucleus. This differs from Circumstance, in which the nucleus and circumstance both refer to a single situation. 
 
-### Circumstance
-- **S:** S supplies a temporal, spatial, situational, or interpretive framework.
-- **N/S:** N is interpreted within the framework in S.
-- **Effect:** R recognizes the framework for interpreting N.
-- **Example:** (SN-Circumstance (text "When the market opened,") (text "prices rose immediately."))
+### circumstance
+- **S:** S is not unrealized 
+- **N/S:** S sets a framework in the subject matter within which R is intended to interpret N 
+- **Effect:** R recognizes that S provides the framework for interpreting N 
+- **Example:** (SN-circumstance (text "Probably the most extreme case of Visitors Fever I have ever witnessed was a few summers ago ") (text "when I visited relatives in the Midwest. "))
+- **Remark:** For the Circumstance relation, unlike Background, the nucleus and satellite are both about a single situation.
 
-### Concession
-- **S:** W acknowledges S although it is apparently incompatible with N.
-- **N/S:** N still holds despite S and is more central.
+### concession
+- **N/S:** W acknowledges a potential or apparent incompatibility between N and S; recognizing the compatibility between N and S increases R's positive regard for N 
 - **Effect:** R's positive regard for N is increased.
-- **Example:** (SN-Concession (text "Although facilities are normally standard,") (text "this campground lacks them."))
+- **Example:** (SN-concession (text "Tempting as it may be, ") (text "we shouldn't embrace every popular issue that comes along."))
 
-### Condition
+### condition
 - **S:** S is hypothetical, future, or unrealized.
 - **N/S:** Realization of N depends on realization of S.
-- **Example:** (SN-Condition (text "If temperatures fall,") (text "the road will freeze."))
+- **Example:** (SN-condition (text "If temperatures fall,") (text "the road will freeze."))
 
-### Elaboration
+### elaboration
 - **N/S:** S gives additional detail about N or an element of N, including set-member, abstraction-instance, whole-part, process-step, object-attribute, or general-specific detail.
 - **Effect:** R recognizes the added detail.
-- **Example:** (NS-Elaboration (text "The committee approved several measures.") (text "One measure funds new shelters."))
+- **Example:** (NS-elaboration (text "The committee approved several measures.") (text "One measure funds new shelters."))
 
-### Enablement
+### enablement
 - **N:** N is an action to be performed by R.
 - **N/S:** S increases R's potential ability to perform N.
-- **Example:** (NS-Enablement (text "Replace the spark plugs.") (text "A wrench is under the cap."))
+- **Example:** (NS-enablement (text "Training on jobs: A series of informative, inexpensive pamphlets and books on worker health discusses such topics as filing a compensation claim, ionizing radiation, asbestos, and several occupational diseases. ") (text "For a catalog and order form write WIOES, 2520 Milvia St., Berkeley, CA 95704. "))
 
-### Evaluation
-- **N/S:** S expresses an evaluative assessment of N.
-- **Effect:** R recognizes the assessment.
-- **Example:** (NS-Evaluation (text "The court searched for a buyer for years.") (text "That failure was disastrous."))
+### evaluation
+- **N/S:** S relates N to degree of W's positive regard toward N. 
+- **Effect:** R recognizes that S assesses N and recognizes the value it assigns
+- **Example:** (NS-evaluation (text "The court searched for a buyer for years.") (text "That failure was disastrous."))
+- **Remark:** The Interpretation and Evaluation relations involve assessing nuclear material in terms of some frame of reference that is not part of the subject matter of the nucleus itself. Evaluation reflects positive regard on the part of the writer
 
-### Evidence
-- **N:** R may not already believe N strongly enough.
-- **N/S:** S is intended to increase R's belief in N.
-- **Example:** (NS-Evidence (text "The policy is ineffective.") (text "Independent audits found no measurable improvement."))
+### evidence
+- **N:** R might not believe N to a degree satisfactory to W on S: R believes S or will find it credible 
+- **N/S:** R's comprehending S increases R's belief of N 
+- **Example:** (NS-evidence (text "we shouldn't embrace every popular issue that comes along. ") (text "When we do so, we use precious, limited resources"))
 
-### Interpretation
-- **N/S:** S interprets the significance of N or relates it to a framework of ideas not explicit in N.
-- **Example:** (NS-Interpretation (text "They bought their first luxury car.") (text "That makes them part of the bourgeoisie."))
+### interpretation
+- **N/S:** on N + S: S relates N to a framework of ideas not involved in N itself and not concerned with W's positive regard 
+- **Effect:** R recognizes that S relates N to a framework of ideas not involved in the knowledge presented in N itself 
+- **Example:** (NS-interpretation (text "They bought their first luxury car.") (text "That makes them part of the bourgeoisie."))
+- **Remark:** The Interpretation and Evaluation relations involve assessing nuclear material in terms of some frame of reference that is not part of the subject matter of the nucleus itself. Interpretation relates the nuclear material to any other frame of reference.
 
-### Justify
-- **N/S:** S increases R's readiness to accept W's right, basis, or authority to present N.
-- **Remark:** Use for justification of saying or asserting, not primarily proof that N is true.
-- **Example:** (NS-Justify (text "I will not eat this dish.") (text "I am a vegetarian."))
+### justify
+- **N/S:** R's comprehending S increases R's readiness to accept W's right to present N 
+- **Example:** (NS-justify (text "I will not eat this dish.") (text "I am a vegetarian."))
 
-### Motivation
-- **N:** N is an action to be performed by R.
-- **N/S:** S increases R's desire or willingness to perform N.
-- **Example:** (SN-Motivation (text "The city would benefit enormously.") (text "Apply to host the games!"))
+### means
+- **N:** on N: an activity
+- **N/S:** S presents a method or instrument which tends to make realization of N more likely 
+- **Effect:** R recognizes that the method or instrument in S tends to make realization of N more likely 
+- **Example:** (SN-means (text "the visual system resolves confusion ") (text "by applying some tricks that reflect a built-in knowledge of properties of the physical world. "))
 
-### Non-volitional Cause
+### motivation
+- **N:** on N: N is an action in which R is the actor (including accepting an offer), unrealized with respect to the context of N
+- **N/S:** Comprehending S increases R's desire to perform action in N
+- **Example:** (NS-motivation (text "Ask for SYNCOM diskettes, with burnished Ectype coating and dust-absorbing jacket liners.") (text "As your floppy drive writes or reads, a Syncom diskette is working four ways"))
+- **Remark:** The Motivation relation is about action by the reader. In this advertisement it is buying the product
+
+### nonvolitional-cause
 - **N/S:** S is a non-deliberate cause of the situation in N.
-- **Example:** (SN-Non-volitional Cause (text "Because the temperature fell,") (text "the road froze."))
+- **Effect:** R recognizes S as a cause of N 
+- **Example:** (SN-nonvolitional cause (text "REMEMBER ALL THOSE VEGETABLES YOU SLIPPED UNDER THE TABLE?") (text "MAYBE THAT'S WHY SPARKY LIVED SO LONG."))
 
-### Non-volitional Result
+### nonvolitional-result
 - **N/S:** S is a non-deliberate result caused by N.
-- **Example:** (NS-Non-volitional Result (text "The temperature fell.") (text "The road therefore froze."))
+- **Effect:** R recognizes that N could have caused the situation in S 
+- **Example:** (NS-nonvolitional result (text "The blast, the worst industrial accident in Mexico's history, destroyed the plant and most of the surrounding suburbs.") (text "Several thousand people were injured, 3. and about 300 are still in hospital."))
 
-### Otherwise
+### otherwise
 - **S:** S presents an unrealized situation.
 - **N/S:** N depends on the non-realization of S.
-- **Example:** (NS-Otherwise (text "Leave now.") (text "Otherwise you will miss the train."))
+- **Effect:** R recognizes the dependency relation of prevention between the realization of N and the realization of S 
+- **Example:** (NS-otherwise (text "Project leaders should submit their entries for the revised brochure immediately.") (text "Otherwise the existing entry will be used. "))
 
-### Purpose
+### purpose
 - **N:** N is an activity.
-- **S:** S is the intended situation or goal realized through N.
-- **Example:** (SN-Purpose (text "To protect the troops,") (text "officials withheld the route."))
+- **S:** S is to be realized through the activity in N 
+- **Example:** (SN-purpose (text "To see which Syncom diskette will replace the ones you're using now, ") (text "send for our free "Flexi-Finder" selection guide and the name of the supplier nearest you."))
 
-### Restatement
-- **N/S:** S repeats N in different wording and at roughly equal scope.
-- **Example:** (NS-Restatement (text "The councillors received every detail,") (text "in other words, they were fully briefed."))
+### restatement
+- **N/S:** on N + S: S restates N, where S and N are of comparable bulk; N is more central to W's purposes than S is. 
+- **Effect:** R recognizes S as a restatement of N 
+- **Example:** (NS-restatement (text "1. A WELL GROOMED CAR REFLECTS ITS OWNER ") (text "2. The car you drive says a lot about you. "))
 
-### Solutionhood
-- **S:** S presents a problem, question, request, or need.
-- **N/S:** N provides or contributes to a solution.
-- **Example:** (SN-Solutionhood (text "The new rules trap many pubs.") (text "They should create separate rooms."))
+### same-unit
+**N:**  Two discontinuous text fragments that are really a single EDU, but which are broken up by any of the following: relative clauses, other nominal postmodifiers, parentheticals, participial clauses. 
+- **Remark:** A pseudo-relation. Examples of embedded units that can break up other EDUs include: relative clauses, other nominal postmodifiers, parentheticals, participial clauses, etc. The embedded unit is joined with part 1 or 2 using the appropriate relation. This resulting span is then joined with the other part using same-unit.
+**Example:** (NN-same-unit (NS-attribution (text "The yen’s softness,") (text "she says,")) (text "apparently stems from Japanese investors’ interest"))
 
-### Summary
-- **N:** N consists of more than one EDU.
+### solutionhood
+- **S:** S presents a problem
+- **N/S:** N is a solution to the problem presented in S; 
+- **Effect:** R recognizes N as a solution to the problem presented in S 
+- **Example:** (SN-solutionhood (text " One difficulty ... is with sleeping bags in which down and feather fillers are used as insulation. This insulation has a tendency to slip toward the bottom. ") (text "You can redistribute the filler."))
+
+### unconditional
+- **S:** S conceivably could affect the realization of N
+- **N/S:** N does not depend on S 
+- **Effect:** R recognizes that N does not depend on S 
+- **Example:** (SN-unconditional (text "IN NO EVENT SHALL THE AUTHOR OR DISTRIBUTORS BE LIABLE") (text "EVEN IF THE AUTHOR HAS BEEN ADVISED OF THE POSSIBILITY OF DAMAGE. "))
+
+### unless
+- **N/S:** S affects the realization of N; N is realized provided that S is not realized 
+- **Effect:** R recognizes that N is realized provided that S is not realized 
+- **Example:** (SN-unless (text "The following terms apply to all files associated with the software ") (text "unless explicitly disclaimed in individual files. "))
+
+### summary
+- **N:** N consists of more than one unit.
 - **N/S:** S gives a shorter condensation of N.
-- **Example:** (NS-Summary (NN-List (text "Sales rose.") (text "Costs fell.")) (text "In short, performance improved."))
+- **Effect:** R recognizes S as a shorter restatement of N 
+- **Example:** (NS-summary (NN-list (text "Sales rose.") (text "Costs fell.")) (text "In short, performance improved."))
 
-### Volitional Cause
-- **N/S:** S causes or motivates an intentional action in N.
-- **Example:** (SN-Volitional Cause (text "Because she wanted shelter,") (text "she entered the building."))
+### volitional-cause
+- **N/S:** S causes or motivates an volitional action in N.
+- **Effect:** R recognizes S as a cause for the volitional action in N 
+- **Example:** (SN-volitional-cause (text "Because she wanted shelter,") (text "she entered the building."))
 
-### Volitional Result
-- **N/S:** S is an intentional action or response resulting from N.
-- **Example:** (NS-Volitional Result (text "The alarm sounded.") (text "People deliberately left the building."))
+### volitional-result
+- **N/S:** S is an volitional action or response resulting from N.
+- **Effect:** R recognizes that N could be a cause for the action or situation in S 
+- **Example:** (NS-volitional-result (text "The alarm sounded.") (text "People deliberately left the building."))
 
-### Preparation
-- **N/S:** S precedes N and makes R more ready, interested, or able to interpret N.
+### preparation
+- **N/S:** S precedes N and makes R more ready, interested, or oriented for reading N 
 - **Remark:** S prepares expectations rather than supplying substantive Background information.
-- **Example:** (SN-Preparation (text "One thing is evident:") (text "the operation has lost credibility."))
+- **Example:** (SN-preparation (text "<a title>: Bouquets in a basket - with living flowers ") (text "<the body of the article>"))
+- **Remark:** It is very common for titles to be preparatory (and not contributory) to a text.
 
-### Contrast
+Multinuclear Relations 
+
+### contrast
 - **N:** Exactly two equally important nuclei are comparable but differ in writer-relevant respects.
 - **Effect:** R recognizes their comparability and differences.
-- **Example:** (NN-Contrast (text "My first car was small.") (text "The second was a limousine."))
+- **Example:** (NN-contrast (text "My first car was small.") (text "The second was a limousine."))
+- **Remark:** This relation has been called Neutral Contrast to reflect the balance of nuclearity, unlike Concession or Antithesis. 
 
-### Joint
+### conjunction
+- **N:** The items are conjoined to form a unit in which each item plays a comparable role
+- **Effect:** R recognizes that the linked items are conjoined
+- **Example:** (NN-conjunction (text "Disney provides great access to transportation") (text "and every cast member is ready to provide detailed directions "))
+
+### disjunction
+- **N:** An item presents a (not necessarily exclusive) alternative for the other(s)
+- **Effect:** R recognizes that the linked items are alternatives
+- **Example:** (NN-disjunction (text "but they are consumed by less active muscles ") (text "or metabolized in the liver"))
+
+### joint
 - **N:** The nuclei are connected without a more specific relation or nuclearity imbalance.
 - **Effect:** R recognizes their coherent equal-weight contribution.
-- **Example:** (NN-Joint (text "The meeting ended.") (text "Outside, rain continued."))
+- **Example:** (NN-joint (text "The meeting ended.") (text "Outside, rain continued."))
+- **Example:** Joint represents the lack of a rhetorical relation between the nuclei. 
 
-### List
+### list
 - **N:** The nuclei are comparable items in a list or set.
-- **Example:** (NN-List (text "Cook dinner.") (text "Clean the bathroom."))
+- **Effect:** R recognizes the comparability of linked items.
+- **Example:** (NN-list (text "I am 17 years old. ") (text "It is summer, and football practice is about to begin. "))
+- **Remark:** These are the opening lines of an essay by a student. They give the first of a larger set of background facts, in a list. 
 
-### Sequence
-- **N:** The nuclei describe events or steps in temporal or procedural order.
-- **Example:** (NN-Sequence (text "The teacher entered.") (text "Five minutes later she announced a test."))
+### mn-restatement
+- **N:** An item is primarily a reexpression of one linked to it; the items are of comparable importance to the purposes of W 
+- **Effect:** R recognizes the reexpression by the linked items 
+- **Example:** (NN-mn-restatement (text "But Grace also said he was able to see the contestants' true beauty. ") (text "Grace is confident in his selections in the Miss Alberta and Miss Teen Alberta pageants by basing his judgment on the contestants' confidence"))
+
+### sequence
+- **N:** TThere is a succession relationship between the situations in the nuclei 
+- **Effect:** R recognizes the succession relationships among the nuclei. 
+- **Example:** (NN-sequence (text "The teacher entered.") (text "Five minutes later she announced a test."))
+- **Remark:** Sequence includes both presentational sequence, e.g. "Secondly," and also subject matter sequence, e.g. "After that," as in this case. 
 
 bracketed tree example:
 ```
-(SN-Background
+(SN-background
         (text 1)
-        (NS-Evaluation
-          (SN-Non-volitional Cause (text 2) (NN-List (text 3) (text 4)))
-          (NS-Evidence (text 5) (text 6))))
+        (NS-evaluation
+          (SN-nonvolitional-cause (text 2) (NN-list (text 3) (text 4)))
+          (NS-evidence (text 5) (text 6))))
 ```
 
 ```tsv

@@ -18,13 +18,13 @@ Use relation definitions and the intended reader effect to validate nuclearity.
 ```text
 If the omission test indicates that neither span is more nuclear, then
     if the spans describe states of affairs in temporal or procedural order
-        assign Sequence
+        assign sequence
     else if exactly two spans are comparable and differ in writer-relevant respects
-        assign Contrast
+        assign contrast
     else if the spans enumerate comparable information of the same type
-        assign List
+        assign list
     else
-        assign Joint
+        assign joint
 ```
 
 ```text
@@ -34,89 +34,89 @@ test the intended reader effect and prefer the most specific applicable relation
 
 ```text
 If S is acknowledged as true or plausible although it conflicts with N, then
-    assign Concession
+    assign concession
 else if S is disfavored or rejected and recognizing the incompatibility increases regard for N
-    assign Antithesis
+    assign antithesis
 ```
 
 ```text
 Else if S supports an assertion in N, then
     if S increases R's belief that N is true
-        assign Evidence
+        assign evidence
     else if S supports W's right, basis, or authority to present N
-        assign Justify
+        assign justify
 ```
 
 ```text
 Else if S evaluates or frames the significance of N, then
     if S appraises N on an evaluative scale
-        assign Evaluation
+        assign evaluation
     else if S relates N to a broader conceptual framework
-        assign Interpretation
+        assign interpretation
 ```
 
 ```text
 Else if N is an action to be performed by R, then
     if S increases R's desire to perform N
-        assign Motivation
+        assign motivation
     else if S increases R's ability to perform N
-        assign Enablement
+        assign enablement
 ```
 
 ```text
 Else if the relation involves hypothetical, future, or unrealized situations, then
     if S is the intended goal realized through the activity in N
-        assign Purpose
+        assign purpose
     else if N depends on the non-realization of S
-        assign Otherwise
+        assign otherwise
     else if realization of N depends on realization of S
-        assign Condition
+        assign condition
 ```
 
 ```text
 Else if the relation is causal, then
     if S causes an intentional action in N
-        assign Volitional Cause
+        assign volitional cause
     else if S is an intentional response or result caused by N
-        assign Volitional Result
+        assign volitional result
     else if S non-deliberately causes the situation in N
-        assign Non-volitional Cause
+        assign non-volitional cause
     else if S is a non-deliberate result caused by N
-        assign Non-volitional Result
+        assign non-volitional result
 ```
 
 ```text
 Else if S supplies information that helps R understand or situate N, then
     if S supplies substantive prior or general knowledge required to comprehend N
-        assign Background
+        assign background
     else if S supplies the temporal, spatial, situational, or interpretive framework for N
-        assign Circumstance
+        assign circumstance
 ```
 
 ```text
 Else if S provides detail about N or an element of N, then
-    assign Elaboration
+    assign elaboration
 ```
 
 ```text
 Else if S presents a problem, question, request, or need and N contributes a resolution, then
-    assign Solutionhood
+    assign solutionhood
 ```
 
 ```text
 Else if the relation is mainly textual or organizational, then
     if S readies or orients R toward following N
-        assign Preparation
+        assign preparation
     else if S repeats N in different wording with roughly equal scope
-        assign Restatement
+        assign restatement
     else if S condenses a larger N into a shorter form
-        assign Summary
+        assign summary
 ```
 
 ```text
 Else
     if both spans are equally important
-        assign Joint
+        assign joint
     else
         choose the most informative applicable relation rather than a vague one.
 ```
@@ -125,9 +125,9 @@ bracketed tree example:
 ```
 (SN-Background
         (text 1)
-        (NS-Evaluation
-          (NS-Volitional Cause (text 2) (NN-List (text 3) (text 4)))
-          (NS-Evidence (text 5) (text 6))))
+        (NS-evaluation
+          (NS-volitional cause (text 2) (NN-list (text 3) (text 4)))
+          (NS-evidence (text 5) (text 6))))
 ```
 
 ```tsv

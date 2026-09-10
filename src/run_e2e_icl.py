@@ -42,7 +42,11 @@ class CompletionResult:
     content: str
     response_id: Optional[str]
     finish_reason: Optional[str]
-    usage: Dict[str, Optional[int]]
+    usage: Dict[str, Any]
+    returned_model: Optional[str] = None
+    system_fingerprint: Optional[str] = None
+    created: Optional[int] = None
+    service_tier: Optional[str] = None
 
 
 @dataclass(frozen=True)
@@ -61,6 +65,7 @@ class OpenAIChatClient:
         endpoint: str,
         api_key: str,
         timeout: float,
+        max_retries: int = 2,
         *,
         client: Optional[Any] = None,
     ) -> None:
@@ -71,7 +76,12 @@ class OpenAIChatClient:
                 raise RuntimeError(
                     "the openai package is required; install it before running experiments"
                 ) from exc
-            client = OpenAI(api_key=api_key, base_url=endpoint, timeout=timeout)
+            client = OpenAI(
+                api_key=api_key,
+                base_url=endpoint,
+                timeout=timeout,
+                max_retries=max_retries,
+            )
         self._client = client
 
     def complete(
@@ -79,16 +89,22 @@ class OpenAIChatClient:
         *,
         model: str,
         messages: List[Dict[str, str]],
-        temperature: float,
-        max_tokens: int,
+        temperature: Optional[float],
+        max_completion_tokens: int,
+        reasoning_effort: Optional[str],
+        use_legacy_max_tokens: bool,
     ) -> CompletionResult:
         """Send a chat completion and normalize the first returned choice."""
-        response = self._client.chat.completions.create(
-            model=model,
-            messages=messages,
-            temperature=temperature,
-            max_tokens=max_tokens,
+        request: Dict[str, Any] = {"model": model, "messages": messages}
+        token_parameter = (
+            "max_tokens" if use_legacy_max_tokens else "max_completion_tokens"
         )
+        request[token_parameter] = max_completion_tokens
+        if temperature is not None:
+            request["temperature"] = temperature
+        if reasoning_effort is not None:
+            request["reasoning_effort"] = reasoning_effort
+        response = self._client.chat.completions.create(**request)
         if not getattr(response, "choices", None):
             raise RuntimeError("Chat Completions response contained no choices")
         choice = response.choices[0]
@@ -96,15 +112,40 @@ class OpenAIChatClient:
         if not isinstance(content, str) or not content.strip():
             raise RuntimeError("Chat Completions response contained no assistant text")
         usage = getattr(response, "usage", None)
-        usage_fields = {
+        usage_fields: Dict[str, Any] = {
             name: getattr(usage, name, None) if usage is not None else None
             for name in ("prompt_tokens", "completion_tokens", "total_tokens")
         }
+        detail_fields = {
+            "prompt_tokens_details": ("cached_tokens",),
+            "completion_tokens_details": (
+                "reasoning_tokens",
+                "accepted_prediction_tokens",
+                "rejected_prediction_tokens",
+            ),
+        }
+        for detail_name, field_names in detail_fields.items():
+            details = getattr(usage, detail_name, None) if usage is not None else None
+            if details is None:
+                continue
+            normalized_details = {
+                name: getattr(details, name, None) for name in field_names
+            }
+            if any(value is not None for value in normalized_details.values()):
+                usage_fields[detail_name] = {
+                    name: value
+                    for name, value in normalized_details.items()
+                    if value is not None
+                }
         return CompletionResult(
             content=content,
             response_id=getattr(response, "id", None),
             finish_reason=getattr(choice, "finish_reason", None),
             usage=usage_fields,
+            returned_model=getattr(response, "model", None),
+            system_fingerprint=getattr(response, "system_fingerprint", None),
+            created=getattr(response, "created", None),
+            service_tier=getattr(response, "service_tier", None),
         )
 
 
@@ -211,8 +252,12 @@ def run_experiment(
     client: Any,
     model: str,
     endpoint: str,
-    temperature: float,
-    max_tokens: int,
+    temperature: Optional[float],
+    max_completion_tokens: int,
+    reasoning_effort: Optional[str],
+    use_legacy_max_tokens: bool,
+    timeout: float,
+    max_retries: int,
     scheme: Scheme,
 ) -> ExperimentSummary:
     """Run each document independently and persist one prompt-free JSON record."""
@@ -224,7 +269,7 @@ def run_experiment(
         for document in documents:
             messages = build_messages(system_prompt, inject_tsv(icl_prompt, document))
             base_record: Dict[str, Any] = {
-                "record_version": 1,
+                "record_version": 2,
                 "doc_id": document.doc_id,
                 "prompt_name": prompt_name,
                 "model": model,
@@ -234,7 +279,17 @@ def run_experiment(
                 "system_prompt_sha256": system_prompt_sha256,
                 "decoding": {
                     "temperature": temperature,
-                    "max_tokens": max_tokens,
+                    "reasoning_effort": reasoning_effort,
+                    "max_completion_tokens": (
+                        None if use_legacy_max_tokens else max_completion_tokens
+                    ),
+                    "max_tokens": (
+                        max_completion_tokens if use_legacy_max_tokens else None
+                    ),
+                },
+                "transport": {
+                    "timeout_seconds": timeout,
+                    "max_retries": max_retries,
                 },
                 "edus": [
                     {"index": index, "text": text}
@@ -246,7 +301,9 @@ def run_experiment(
                     model=model,
                     messages=messages,
                     temperature=temperature,
-                    max_tokens=max_tokens,
+                    max_completion_tokens=max_completion_tokens,
+                    reasoning_effort=reasoning_effort,
+                    use_legacy_max_tokens=use_legacy_max_tokens,
                 )
                 if result.finish_reason not in (None, "stop"):
                     raise RuntimeError(
@@ -258,6 +315,10 @@ def run_experiment(
                     "raw_tree": result.content,
                     "response": {
                         "id": result.response_id,
+                        "model": result.returned_model,
+                        "system_fingerprint": result.system_fingerprint,
+                        "created": result.created,
+                        "service_tier": result.service_tier,
                         "finish_reason": result.finish_reason,
                         "usage": result.usage,
                     },
@@ -300,9 +361,37 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--output", required=True, help="Destination JSONL path")
     parser.add_argument("--model", required=True, help="API model identifier")
     parser.add_argument("--endpoint", required=True, help="OpenAI-compatible base URL")
-    parser.add_argument("--temperature", type=float, default=0.0)
-    parser.add_argument("--max-tokens", type=int, default=4096)
-    parser.add_argument("--timeout", type=float, default=120.0)
+    parser.add_argument(
+        "--reasoning-effort",
+        choices=("none", "low", "medium", "high", "xhigh", "max"),
+        help="Optional reasoning effort for endpoints that support it",
+    )
+    parser.add_argument(
+        "--temperature",
+        type=float,
+        help="Optional sampling temperature; omitted from the request by default",
+    )
+    token_group = parser.add_mutually_exclusive_group()
+    token_group.add_argument(
+        "--max-completion-tokens",
+        type=int,
+        help=(
+            "Modern Chat Completions output limit, including reasoning tokens "
+            "(default: 8192)"
+        ),
+    )
+    token_group.add_argument(
+        "--max-tokens",
+        type=int,
+        help="Legacy output-limit parameter for older compatible endpoints",
+    )
+    parser.add_argument("--timeout", type=float, default=300.0)
+    parser.add_argument(
+        "--max-retries",
+        type=int,
+        default=2,
+        help="SDK transport retries for transient API failures (default: 2)",
+    )
     parser.add_argument(
         "--system-prompt",
         default=str(_ROOT / "prompts" / "system_prompt.txt"),
@@ -313,7 +402,22 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: Optional[List[str]] = None) -> int:
     """CLI entry point."""
-    args = build_parser().parse_args(argv)
+    parser = build_parser()
+    args = parser.parse_args(argv)
+    if args.temperature is not None and not 0 <= args.temperature <= 2:
+        parser.error("--temperature must be between 0 and 2")
+    if args.max_completion_tokens is not None:
+        requested_token_limit = args.max_completion_tokens
+    elif args.max_tokens is not None:
+        requested_token_limit = args.max_tokens
+    else:
+        requested_token_limit = 8192
+    if requested_token_limit <= 0:
+        parser.error("the output token limit must be positive")
+    if args.timeout <= 0:
+        parser.error("--timeout must be positive")
+    if args.max_retries < 0:
+        parser.error("--max-retries must not be negative")
     api_key = os.environ.get("OPENAI_API_KEY")
     if not api_key:
         raise SystemExit("OPENAI_API_KEY is required")
@@ -330,7 +434,12 @@ def main(argv: Optional[List[str]] = None) -> int:
     # Validate prompt shape before creating the API client or opening output.
     inject_tsv(icl_prompt, documents[0])
 
-    client = OpenAIChatClient(args.endpoint, api_key, args.timeout)
+    client = OpenAIChatClient(
+        args.endpoint,
+        api_key,
+        args.timeout,
+        max_retries=args.max_retries,
+    )
     summary = run_experiment(
         documents=documents,
         system_prompt=system_prompt,
@@ -341,7 +450,11 @@ def main(argv: Optional[List[str]] = None) -> int:
         model=args.model,
         endpoint=args.endpoint,
         temperature=args.temperature,
-        max_tokens=args.max_tokens,
+        max_completion_tokens=requested_token_limit,
+        reasoning_effort=args.reasoning_effort,
+        use_legacy_max_tokens=args.max_tokens is not None,
+        timeout=args.timeout,
+        max_retries=args.max_retries,
         scheme=scheme,
     )
     print(f"succeeded={summary.succeeded} failed={summary.failed}")

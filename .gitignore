@@ -3,6 +3,9 @@ __pycache__/
 .venv/
 .env
 
+# Non-public input data for inference
+data/input
+
 # Inference artifacts may contain source text or provider metadata.
 results/predictions/
 results/rs3/*/

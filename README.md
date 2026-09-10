@@ -17,13 +17,24 @@ The older pairwise relation-labeling utilities are still present, but they are n
 
 ## Installation
 
-Use Python 3.10 or later.
+Use Python 3.10 or later. The verified setup uses Python 3.12 and `uv`:
 
 ```bash
-python -m venv .venv
-. .venv/bin/activate
-pip install -r requirements-e2e.lock
+uv venv --python 3.12 .venv
+uv pip sync --python .venv/bin/python requirements-e2e.lock
+source .venv/bin/activate
 ```
+
+If `uv` is unavailable, the equivalent standard-library/pip setup is:
+
+```bash
+python3.12 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements-e2e.lock
+```
+
+`.venv/` is ignored by Git. Activate it in every new shell before using the
+commands below; no API credential is stored in the environment directory.
 
 `requirements.txt` adds the dependencies for the legacy Hugging Face/pairwise
 benchmark. `requirements-e2e.lock` is the resolved Python 3.12/Linux environment
@@ -57,16 +68,51 @@ Rows keep their input order and define textual EDU order. Blank `doc_id` or
 `text`, malformed/duplicate indices, duplicate headers, and unexpected columns
 are rejected before any API request. EDU text is preserved for RS3 output.
 
-## Scheme And Prompt Selection
+### Prepare TSV from existing RS3
 
-The supported starter profile is `configs/schemes/pcc.yaml`. A scheme profile
-defines its exact relation inventory, each relation's `rst` or `multinuc` type,
-its version, and its default prompt. E2E prompts live in `prompts/` and must be
-named `ICL_*_e2e.txt`.
+If source documents are already `.rs3`, export their segment layer directly:
+
+```bash
+python -m src.rs3_to_e2e_tsv \
+  --input /path/to/gold-rs3/ \
+  --output data/processed/project_documents.tsv
+```
+
+The input may be one file or a directory. Add `--recursive` for nested
+directories. The command writes the inference TSV plus, by default:
 
 ```text
-prompts/ICL_pcc_algo_e2e.txt
+data/processed/project_documents.tsv.manifest.jsonl
 ```
+
+RS3 segment elements are read in XML body order and assigned fresh sequential
+indices. Their text is preserved exactly. The manifest maps each new index to
+its original RS3 node ID and records source/text hashes. This matters because
+RS3 node IDs are graph identifiers and are not reliably consecutive textual
+positions.
+
+The exporter verifies its TSV through the inference reader before publishing
+it and refuses existing outputs unless `--overwrite` is supplied. The TSV
+contains no gold tree or relation labels; retain the original `.rs3` files for
+evaluation. Consequently, this preprocessing step is lossless for the EDU
+layer but intentionally not a structural RS3 round-trip.
+
+## Scheme And Prompt Selection
+
+The repository includes a general PCC starter and the project-specific English
+ArgMicrotexts profile. The latter reproduces the released 34-relation header
+without `sameunit`, matching inputs whose segmentation does not split
+interrupted EDUs.
+
+```text
+configs/schemes/pcc.yaml
+configs/schemes/argmicrotexts.yaml
+prompts/ICL_argmicrotexts_algo_e2e.txt
+```
+
+A scheme profile defines its exact relation inventory, each relation's `rst`
+or `multinuc` type, its version, and its default prompt. E2E prompts live in
+`prompts/` and must be named `ICL_*_e2e.txt`.
 
 Each e2e prompt must end with one empty TSV block:
 
@@ -81,30 +127,59 @@ inventory. The selected prompt and scheme are hashed into every prediction.
 
 ## Run An E2E Experiment
 
-Set an API key and provide the endpoint and model explicitly:
+For a copy-ready walkthrough of the first ArgMicrotexts request, see
+[`docs/argmicrotexts-smoke-test.md`](docs/argmicrotexts-smoke-test.md).
+
+Enter an API key without echoing it or placing it in shell history. The
+variable is available only to this shell and its child processes; close the
+shell or run `unset OPENAI_API_KEY` when finished.
 
 ```bash
-export OPENAI_API_KEY="..."
-
-python -m src.run_e2e_icl \
-  --input data/processed/documents.example.tsv \
-  --scheme configs/schemes/pcc.yaml \
-  --output results/predictions/pcc_e2e.jsonl \
-  --model gpt-4.1-mini \
-  --endpoint https://api.openai.com/v1
+read -rsp "OpenAI API key: " OPENAI_API_KEY
+export OPENAI_API_KEY
+printf '\n'
 ```
 
-`--endpoint` is an OpenAI-compatible base URL, so local or hosted compatible servers can use the same command shape.
-The endpoint must implement Chat Completions and accept `model`, `messages`,
-`temperature`, and `max_tokens`. `OPENAI_API_KEY` is required by the runner;
-use a non-secret placeholder only when a local endpoint genuinely ignores it.
+Prepare a one-document smoke-test TSV:
+
+```bash
+python -m src.rs3_to_e2e_tsv \
+  --input data/input/microtexts_nosameunit_subset/micro_b001_original.rs3 \
+  --output data/processed/argmicrotexts_smoke.tsv
+```
+
+Then run the recommended initial OpenAI experiment:
+
+```bash
+python -m src.run_e2e_icl \
+  --input data/processed/argmicrotexts_smoke.tsv \
+  --scheme configs/schemes/argmicrotexts.yaml \
+  --output results/predictions/argmicrotexts_terra_medium_smoke.jsonl \
+  --model gpt-5.6-terra \
+  --endpoint https://api.openai.com/v1 \
+  --reasoning-effort medium \
+  --max-completion-tokens 8192
+```
+
+`--endpoint` is an OpenAI-compatible base URL, so local or hosted compatible
+servers can use the same command shape. The endpoint must implement Chat
+Completions and accept `model` and `messages`. Modern OpenAI requests use
+`max_completion_tokens`; pass `--max-tokens` instead for an older compatible
+server that implements only that legacy parameter. `--reasoning-effort` and
+`--temperature` are omitted unless explicitly supplied, which avoids sending
+unsupported options to other providers. `OPENAI_API_KEY` remains required by
+the runner; use a non-secret placeholder only when a local endpoint genuinely
+ignores it.
 
 Useful optional flags:
 
 ```text
+--reasoning-effort medium
 --temperature 0.0
---max-tokens 4096
---timeout 120.0
+--max-completion-tokens 8192
+--max-tokens 4096              # legacy alternative; mutually exclusive
+--timeout 300.0
+--max-retries 2
 --system-prompt prompts/system_prompt.txt
 ```
 
@@ -115,15 +190,21 @@ refuses to append to an existing file so separate runs cannot be mixed silently:
 
 ```json
 {
-  "record_version": 1,
-  "doc_id": "gum_news_1",
-  "prompt_name": "ICL_pcc_algo_e2e.txt",
-  "model": "gpt-4.1-mini",
+  "record_version": 2,
+  "doc_id": "micro_b001_original",
+  "prompt_name": "ICL_argmicrotexts_algo_e2e.txt",
+  "model": "gpt-5.6-terra",
   "endpoint": "https://api.openai.com/v1",
-  "scheme": {"name": "pcc", "version": "1", "sha256": "..."},
+  "scheme": {"name": "argmicrotexts-en-nosameunit", "version": "1", "sha256": "..."},
   "prompt_sha256": "...",
   "system_prompt_sha256": "...",
-  "decoding": {"temperature": 0.0, "max_tokens": 4096},
+  "decoding": {
+    "temperature": null,
+    "reasoning_effort": "medium",
+    "max_completion_tokens": 8192,
+    "max_tokens": null
+  },
+  "transport": {"timeout_seconds": 300.0, "max_retries": 2},
   "edus": [
     {"index": "1", "text": "The committee met on Tuesday."},
     {"index": "2", "text": "It approved the proposal."}
@@ -132,6 +213,10 @@ refuses to append to an existing file so separate runs cannot be mixed silently:
   "raw_tree": "(NS-elaboration (text 1) (text 2))",
   "response": {
     "id": "response-id",
+    "model": "returned-model-id",
+    "system_fingerprint": "provider-fingerprint",
+    "created": 1789056000,
+    "service_tier": "default",
     "finish_reason": "stop",
     "usage": {
       "prompt_tokens": 100,
@@ -151,18 +236,17 @@ The runner returns a nonzero exit status if any API request fails.
 Convert successful JSONL records to one `.rs3` file per document:
 
 ```bash
-python \
-  -m src.convert_e2e_to_rs3 \
-  --input results/predictions/pcc_e2e.jsonl \
-  --scheme configs/schemes/pcc.yaml \
-  --output-dir results/rs3/pcc_e2e
+python -m src.convert_e2e_to_rs3 \
+  --input results/predictions/argmicrotexts_terra_medium_smoke.jsonl \
+  --scheme configs/schemes/argmicrotexts.yaml \
+  --output-dir results/rs3/argmicrotexts_terra_medium_smoke
 ```
 
 The converter writes:
 
 ```text
-results/rs3/pcc_e2e/<doc_id>.rs3
-results/rs3/pcc_e2e/conversion_report.jsonl
+results/rs3/argmicrotexts_terra_medium_smoke/<doc_id>.rs3
+results/rs3/argmicrotexts_terra_medium_smoke/conversion_report.jsonl
 ```
 
 `doc_id` values are sanitized before becoming filenames. API-error records are
@@ -190,6 +274,9 @@ For a project-specific PCC-like scheme:
 Relation identifiers cannot contain spaces; use a stable slug such as
 `causal-result`. See `docs/inference-contract.md` for design rationale,
 invariants, provenance, and versioning rules.
+
+The evidence audit and unresolved decisions for the current ArgMicrotexts
+adaptation are recorded in `docs/argmicrotexts-project-profile.md`.
 
 ## Test
 
@@ -229,6 +316,12 @@ rsttace compare \
   results/rs3/pcc_e2e/ \
   -o results/rsttace/
 ```
+
+Evaluator compatibility must be checked on the chosen gold corpus before a
+full run. In particular, RST-Tace rejects original ArgMicrotexts trees that
+attach multiple mononuclear satellites directly to one nucleus. Such trees
+need a documented normalization or a different evaluator; do not silently
+rewrite gold files merely to satisfy a scoring tool.
 
 ## Data
 

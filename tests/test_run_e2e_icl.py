@@ -165,6 +165,10 @@ class OpenAIChatClientTests(unittest.TestCase):
     def test_normalizes_chat_completion_response(self):
         response = SimpleNamespace(
             id="response-1",
+            model="returned-model-snapshot",
+            system_fingerprint="fingerprint-1",
+            created=1234567890,
+            service_tier="default",
             choices=[
                 SimpleNamespace(
                     message=SimpleNamespace(content="(NN-Joint (text 1) (text 2))"),
@@ -175,6 +179,8 @@ class OpenAIChatClientTests(unittest.TestCase):
                 prompt_tokens=12,
                 completion_tokens=8,
                 total_tokens=20,
+                prompt_tokens_details=SimpleNamespace(cached_tokens=4),
+                completion_tokens_details=SimpleNamespace(reasoning_tokens=6),
             ),
         )
         completions = FakeCompletions(response)
@@ -190,7 +196,9 @@ class OpenAIChatClientTests(unittest.TestCase):
             model="test-model",
             messages=[{"role": "user", "content": "parse"}],
             temperature=0.2,
-            max_tokens=123,
+            max_completion_tokens=123,
+            reasoning_effort="medium",
+            use_legacy_max_tokens=False,
         )
 
         self.assertEqual(
@@ -199,7 +207,17 @@ class OpenAIChatClientTests(unittest.TestCase):
                 content="(NN-Joint (text 1) (text 2))",
                 response_id="response-1",
                 finish_reason="stop",
-                usage={"prompt_tokens": 12, "completion_tokens": 8, "total_tokens": 20},
+                usage={
+                    "prompt_tokens": 12,
+                    "completion_tokens": 8,
+                    "total_tokens": 20,
+                    "prompt_tokens_details": {"cached_tokens": 4},
+                    "completion_tokens_details": {"reasoning_tokens": 6},
+                },
+                returned_model="returned-model-snapshot",
+                system_fingerprint="fingerprint-1",
+                created=1234567890,
+                service_tier="default",
             ),
         )
         self.assertEqual(
@@ -208,7 +226,39 @@ class OpenAIChatClientTests(unittest.TestCase):
                 "model": "test-model",
                 "messages": [{"role": "user", "content": "parse"}],
                 "temperature": 0.2,
-                "max_tokens": 123,
+                "max_completion_tokens": 123,
+                "reasoning_effort": "medium",
+            }],
+        )
+
+    def test_omits_optional_sampling_and_reasoning_and_supports_legacy_limit(self):
+        response = SimpleNamespace(
+            id="response-1",
+            choices=[SimpleNamespace(
+                message=SimpleNamespace(content="(text 1)"),
+                finish_reason="stop",
+            )],
+            usage=None,
+        )
+        completions = FakeCompletions(response)
+        sdk_client = SimpleNamespace(chat=SimpleNamespace(completions=completions))
+        client = OpenAIChatClient("endpoint", "secret", 15.0, client=sdk_client)
+
+        client.complete(
+            model="compatible-model",
+            messages=[{"role": "user", "content": "parse"}],
+            temperature=None,
+            max_completion_tokens=321,
+            reasoning_effort=None,
+            use_legacy_max_tokens=True,
+        )
+
+        self.assertEqual(
+            completions.calls,
+            [{
+                "model": "compatible-model",
+                "messages": [{"role": "user", "content": "parse"}],
+                "max_tokens": 321,
             }],
         )
 
@@ -218,19 +268,37 @@ class OpenAIChatClientTests(unittest.TestCase):
         client = OpenAIChatClient("endpoint", "secret", 15.0, client=sdk_client)
 
         with self.assertRaisesRegex(RuntimeError, "no choices"):
-            client.complete(model="model", messages=[], temperature=0.0, max_tokens=10)
+            client.complete(
+                model="model",
+                messages=[],
+                temperature=None,
+                max_completion_tokens=10,
+                reasoning_effort=None,
+                use_legacy_max_tokens=False,
+            )
 
 
 class SequencedClient:
     def __init__(self):
         self.calls = []
 
-    def complete(self, *, model, messages, temperature, max_tokens):
+    def complete(
+        self,
+        *,
+        model,
+        messages,
+        temperature,
+        max_completion_tokens,
+        reasoning_effort,
+        use_legacy_max_tokens,
+    ):
         self.calls.append({
             "model": model,
             "messages": messages,
             "temperature": temperature,
-            "max_tokens": max_tokens,
+            "max_completion_tokens": max_completion_tokens,
+            "reasoning_effort": reasoning_effort,
+            "use_legacy_max_tokens": use_legacy_max_tokens,
         })
         user_message = messages[1]["content"]
         if "Failure." in user_message:
@@ -263,8 +331,12 @@ class RunExperimentTests(unittest.TestCase):
                 client=client,
                 model="test-model",
                 endpoint="http://localhost:8000/v1",
-                temperature=0.0,
-                max_tokens=4096,
+                temperature=None,
+                max_completion_tokens=8192,
+                reasoning_effort="medium",
+                use_legacy_max_tokens=False,
+                timeout=300.0,
+                max_retries=2,
                 scheme=TEST_SCHEME,
             )
             serialized = output.read_text(encoding="utf-8")
@@ -272,7 +344,7 @@ class RunExperimentTests(unittest.TestCase):
         records = [__import__("json").loads(line) for line in serialized.splitlines()]
         self.assertEqual(summary, ExperimentSummary(succeeded=2, failed=1))
         self.assertEqual(len(records), 3)
-        self.assertEqual(records[0]["record_version"], 1)
+        self.assertEqual(records[0]["record_version"], 2)
         self.assertEqual(records[0]["prompt_name"], "ICL_rstweb_algo_e2e.txt")
         self.assertEqual(records[0]["status"], "ok")
         self.assertEqual(records[0]["raw_tree"], "(NN-Joint (text 1) (text 2))")
@@ -281,7 +353,17 @@ class RunExperimentTests(unittest.TestCase):
         self.assertEqual(len(records[0]["prompt_sha256"]), 64)
         self.assertEqual(len(records[0]["system_prompt_sha256"]), 64)
         self.assertEqual(
-            records[0]["decoding"], {"temperature": 0.0, "max_tokens": 4096}
+            records[0]["decoding"],
+            {
+                "temperature": None,
+                "reasoning_effort": "medium",
+                "max_completion_tokens": 8192,
+                "max_tokens": None,
+            },
+        )
+        self.assertEqual(
+            records[0]["transport"],
+            {"timeout_seconds": 300.0, "max_retries": 2},
         )
         self.assertEqual(records[0]["response"]["id"], "r1")
         self.assertIsNone(records[0]["error"])
@@ -311,6 +393,9 @@ class CliHelpTests(unittest.TestCase):
             "--model",
             "--prompt",
             "--scheme",
+            "--reasoning-effort",
+            "--max-completion-tokens",
+            "--max-tokens",
             "OPENAI_API_KEY",
             "prompt_name",
             "excludes prompt bodies",

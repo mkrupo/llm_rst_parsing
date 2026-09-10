@@ -82,7 +82,7 @@ def _record_edus(record: Mapping[str, Any]) -> Tuple[List[str], Dict[str, str]]:
 
 
 def _validate_scheme_provenance(record: Mapping[str, Any], scheme: Scheme) -> None:
-    if record.get("record_version") != 1:
+    if record.get("record_version") not in (1, 2):
         raise ValueError(
             f"unsupported prediction record version: {record.get('record_version')!r}"
         )

@@ -20,6 +20,10 @@ legacy code and must not silently define e2e behavior.
 
 ## Invariants
 
+- RS3 preprocessing reads segments in XML body order, assigns fresh sequential
+  prompt indices, preserves EDU text exactly, and records original node IDs and
+  source hashes in a sidecar manifest. It never treats numeric RS3 IDs as text
+  positions or projects the gold tree into inference input.
 - Input indices are unique positive canonical integers within each document.
 - A successful tree uses every input index exactly once and in input order.
 - Model output never supplies final RS3 segment text; conversion hydrates the

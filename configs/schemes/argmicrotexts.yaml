@@ -1,0 +1,43 @@
+name: argmicrotexts-en-nosameunit
+version: 1
+description: >-
+  English Argumentative Microtexts profile reproducing the 34-relation RS3
+  header used by documents without embedded-EDU sameunit repairs. This profile
+  intentionally omits sameunit because input segmentation must not split an
+  interrupted EDU.
+prompt: ICL_argmicrotexts_algo_e2e.txt
+relations:
+  antithesis: rst
+  background: rst
+  circumstance: rst
+  concession: rst
+  condition: rst
+  elaboration: rst
+  e-elaboration: rst
+  enablement: rst
+  evaluation-s: rst
+  evidence: rst
+  interpretation: rst
+  justify: rst
+  means: rst
+  motivation: rst
+  cause: rst
+  result: rst
+  otherwise: rst
+  preparation: rst
+  purpose: rst
+  restatement: rst
+  solutionhood: rst
+  summary: rst
+  unconditional: rst
+  unless: rst
+  unstated-relation: rst
+  evaluation-n: rst
+  reason: rst
+  conjunction: multinuc
+  contrast: multinuc
+  disjunction: multinuc
+  joint: multinuc
+  list: multinuc
+  restatement-mn: multinuc
+  sequence: multinuc

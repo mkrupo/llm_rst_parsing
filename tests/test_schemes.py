@@ -20,6 +20,36 @@ class SchemeTests(unittest.TestCase):
         self.assertEqual(scheme.relations["joint"], "multinuc")
         self.assertEqual(len(scheme.sha256), 64)
 
+    def test_argmicrotexts_profile_matches_released_no_sameunit_header(self):
+        scheme = load_scheme(ROOT / "configs" / "schemes" / "argmicrotexts.yaml")
+
+        self.assertEqual(scheme.name, "argmicrotexts-en-nosameunit")
+        self.assertEqual(scheme.version, "1")
+        self.assertEqual(len(scheme.relations), 34)
+        self.assertEqual(
+            {relation for relation, kind in scheme.relations.items() if kind == "rst"},
+            {
+                "antithesis", "background", "circumstance", "concession",
+                "condition", "elaboration", "e-elaboration", "enablement",
+                "evaluation-s", "evidence", "interpretation", "justify",
+                "means", "motivation", "cause", "result", "otherwise",
+                "preparation", "purpose", "restatement", "solutionhood",
+                "summary", "unconditional", "unless", "unstated-relation",
+                "evaluation-n", "reason",
+            },
+        )
+        self.assertEqual(
+            {relation for relation, kind in scheme.relations.items() if kind == "multinuc"},
+            {
+                "conjunction", "contrast", "disjunction", "joint", "list",
+                "restatement-mn", "sequence",
+            },
+        )
+        self.assertNotIn("sameunit", scheme.relations)
+        self.assertNotIn("same-unit", scheme.relations)
+        self.assertNotIn("attribution", scheme.relations)
+        self.assertNotIn("reason-n", scheme.relations)
+
     def test_every_scheme_prompt_declares_its_exact_inventory_and_contract(self):
         scheme_paths = sorted((ROOT / "configs" / "schemes").glob("*.yaml"))
         self.assertTrue(scheme_paths)

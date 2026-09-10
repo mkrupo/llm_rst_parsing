@@ -32,6 +32,26 @@ Unexpected columns are currently rejected. If a future project needs document
 or EDU metadata, extend the input contract explicitly and test how that metadata
 is represented in prompts and outputs.
 
+## Preparing inference TSV from RS3
+
+`src.rs3_to_e2e_tsv` extracts the segment layer from one `.rs3` file or a
+directory of files. Segment elements are read in XML body order, which is the
+textual order in rstWeb RS3; numeric source node IDs are not assumed to encode
+text position. Fresh one-based indices make the model-facing representation
+simple, while a JSONL sidecar records each new index's original RS3 node ID,
+the source path, and SHA-256 hashes.
+
+EDU text is preserved exactly, including meaningful leading/trailing
+whitespace and decoded XML entities. The exporter re-reads its temporary TSV
+through the inference reader and checks every document, index, and text value
+before publishing either output. Existing TSV or manifest files are preserved
+unless `--overwrite` is explicit.
+
+The TSV contains segmentation and text only. It deliberately omits the source
+tree and relation annotations so they cannot leak into model input. Therefore
+RS3 -> TSV -> predicted RS3 is not a literal structural round-trip: keep the
+original RS3 files unchanged as gold references for later evaluation.
+
 ## Model-output contract
 
 The model returns one parenthesized tree. Leaves are `(text INDEX)`. Relation
@@ -64,7 +84,11 @@ Each prediction contains:
 - an explicit prediction-record format version;
 - source `doc_id` and ordered `edus`;
 - endpoint and model identifier;
-- requested decoding parameters and returned usage/finish metadata;
+- requested decoding parameters and returned usage/finish metadata, including
+  reasoning-token counts when exposed by the provider;
+- requested timeout and transport retry count;
+- the provider-returned model identifier, system fingerprint, creation time,
+  and service tier when exposed by the provider;
 - scheme name, version, and SHA-256;
 - ICL prompt and system-prompt SHA-256 values;
 - raw model text, finish reason, usage, and structured errors.
@@ -76,6 +100,17 @@ the exact tracked prompt files.
 The supported environment is resolved in `requirements-e2e.lock` with its
 Python/platform context recorded at the top. `requirements-e2e.txt` is the
 human-maintained list used when intentionally refreshing that lock.
+
+Prediction record version 2 distinguishes the modern
+`max_completion_tokens` request from the legacy `max_tokens` alternative and
+records explicit reasoning effort. Conversion remains compatible with version
+1 records created before this metadata change.
+
+The supported transport remains OpenAI-compatible Chat Completions. Modern
+reasoning options are optional so a project can omit them for a compatible
+provider that does not implement them. Temperature is likewise omitted by
+default. Provider-specific behavior belongs in explicit runner arguments and
+result metadata, not in a scheme prompt.
 
 ## Adapting the starter profile
 
@@ -101,3 +136,15 @@ tree was also parsed successfully by RST-Tace at the revision pinned in
 `requirements.txt`; its analysis recovered the expected `elaboration` and
 `joint` relations. This is a serialization/interoperability check, not evidence
 of model annotation quality, which still requires a project-specific gold pilot.
+
+On 2026-09-10 the RS3 exporter also processed the public ArgMicrotexts
+Multilayer RST directory: 112 documents and 680 EDUs. Re-reading the generated
+TSV preserved all source strings exactly. As an independent ordering check,
+the source segment texts after boundary-whitespace stripping matched the
+separately maintained English gold `.edus` exports for all 112 documents.
+
+RST-Tace does not accept every original ArgMicrotexts tree: it rejects source
+files with multiple mononuclear satellites attached directly to one nucleus.
+Gold/prediction scoring therefore requires an explicit, tested normalization
+policy or another evaluator; successful RS3-to-TSV preprocessing alone does
+not settle that evaluation choice.

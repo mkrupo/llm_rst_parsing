@@ -47,8 +47,12 @@ class E2EPipelineTests(unittest.TestCase):
                 client=_SuccessfulClient(),
                 model="fake-model",
                 endpoint="http://localhost/v1",
-                temperature=0.0,
-                max_tokens=100,
+                temperature=None,
+                max_completion_tokens=100,
+                reasoning_effort="medium",
+                use_legacy_max_tokens=False,
+                timeout=300.0,
+                max_retries=2,
                 scheme=scheme,
             )
 

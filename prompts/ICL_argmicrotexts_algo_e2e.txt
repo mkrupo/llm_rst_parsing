@@ -1,0 +1,192 @@
+Analyze the target English TSV document and return one complete compact discourse tree.
+Refer to text fragments only by their index.
+
+OUTPUT CONTRACT:
+- Return exactly one tree and no other text or Markdown.
+- Each leaf must have the form `(text INDEX)`.
+- Use every input index exactly once, in the same left-to-right order as the TSV.
+- Do not alter the supplied segmentation.
+- A mononuclear node is `(NS-RELATION LEFT RIGHT)` or `(SN-RELATION LEFT RIGHT)`;
+  the two letters give the nuclearity of the left and right child respectively.
+- A multinuclear node is `(NN-RELATION CHILD CHILD ...)` and has at least two children.
+- Use `NN` only with a multinuclear relation and `NS` or `SN` only with an RST relation.
+- Relation identifiers are case-sensitive. Use only these exact identifiers:
+  antithesis, background, circumstance, concession, condition, elaboration,
+  e-elaboration, enablement, evaluation-s, evidence, interpretation, justify,
+  means, motivation, cause, result, otherwise, preparation, purpose, restatement,
+  solutionhood, summary, unconditional, unless, unstated-relation, evaluation-n,
+  reason, conjunction, contrast, disjunction, joint, list, restatement-mn, sequence.
+
+ANNOTATION PRINCIPLES:
+- Build a single projective tree over the supplied EDUs; combine adjacent spans bottom-up.
+- Infer relations from the communicated situations and writer intentions, not from a
+  connective alone.
+- Prefer a more specific applicable relation over `joint` or `unstated-relation`.
+- When both a primarily pragmatic and a primarily semantic analysis are plausible,
+  prefer the pragmatic relation for this argumentative genre.
+
+```text
+PRECHECK:
+Apply the omission test to determine whether the candidate relation is mononuclear
+or multinuclear.
+
+If one span can be omitted while the other still performs the same local text function,
+    mark the indispensable span as NUCLEUS
+    and the omissible/supporting span as SATELLITE.
+
+If both spans remain independently functional and equally central,
+    treat the relation as MULTINUCLEAR.
+
+Use the relation definitions below to validate nuclearity.
+```
+
+```text
+If several spans are equally central, then
+    if they present alternatives, whether exclusive or inclusive
+        assign disjunction
+    else if they describe states of affairs in temporal order
+        assign sequence
+    else if exactly two spans are comparable but differ in writer-relevant respects
+        assign contrast
+    else if one span primarily reexpresses another and both have comparable importance
+        assign restatement-mn
+    else if they enumerate comparable information
+        if they are explicitly conjoined as a single coordinated unit
+            assign conjunction
+        else
+            assign list
+    else
+        assign joint
+```
+
+```text
+Else, if the omission test identifies NUCLEUS and SATELLITE,
+test primarily pragmatic relations before semantic and textual relations.
+```
+
+```text
+If S makes it easier for R to understand N, especially by providing necessary
+prior or topic information, then
+    assign background
+```
+
+```text
+Else if the relation is adversative, contrastive, or expectation-violating, then
+    if S is acknowledged as true or valid but N still holds against expectation
+        assign concession
+    else if S is the rejected or less important thesis and W identifies with N
+        assign antithesis
+```
+
+```text
+Else if S supports a subjective claim, thesis, or evaluation in N, then
+    if S is presented as objective fact, observation, or acceptable evidence
+        assign evidence
+    else if S is also a subjective claim or thesis by W
+        assign reason
+    else if S supports W's right to present N or gives a basic justificatory stance
+        assign justify
+```
+
+```text
+Else if one span evaluates the other from W's perspective, then
+    if the evaluation is omissible and the evaluated material remains central
+        assign evaluation-s
+    else if the evaluation is the central point and the evaluated material is supporting
+        assign evaluation-n
+```
+
+```text
+Else if N is an action to be performed by the reader, then
+    if S increases R's desire to perform N
+        assign motivation
+    else if S increases R's ability to perform N
+        assign enablement
+```
+
+```text
+Else if the relation involves unrealized, hypothetical, future, or potential situations, then
+    if N is an activity and S is the unrealized goal achieved through N
+        assign purpose
+    else if S could conceivably affect N but N holds regardless of whether S is realized
+        assign unconditional
+    else if N is realized provided that S is not realized
+        assign unless
+    else if realizing N prevents or impedes realizing S
+        assign otherwise
+    else if realization of N depends on realization of S
+        assign condition
+```
+
+```text
+Else if the relation is factive causality, then
+    if S causes N and N is central
+        assign cause
+    else if N causes S and N is central
+        assign result
+```
+
+```text
+Else if N is an activity and S gives the instrument, method, or way that makes N
+possible or easier, then
+    assign means
+```
+
+```text
+Else if S presents a problem, question, request, or need and N presents a full or
+partial solution, then
+    assign solutionhood
+```
+
+```text
+Else if S provides an actual temporal, locative, or situational framework for N, then
+    assign circumstance
+```
+
+```text
+Else if S shifts N into a different conceptual frame without primarily evaluating it, then
+    assign interpretation
+```
+
+```text
+Else if S provides detail or more information about N, then
+    if S elaborates a single entity mentioned or inferable in N
+        assign e-elaboration
+    else
+        assign elaboration
+```
+
+```text
+Else if the relation is mainly textual or organizational, then
+    if S precedes N and merely orients R toward N
+        assign preparation
+    else if S repeats N in different wording, has roughly equal size, but is less central
+        assign restatement
+    else if S follows a multi-EDU N and gives a shorter restatement
+        assign summary
+```
+
+```text
+Else
+    if both spans are equally important and no more specific multinuclear relation applies
+        assign joint
+    else if a coherent relation is present but none of the named relations can express it
+        assign unstated-relation
+
+Use unstated-relation only as a last resort. Uncertainty between two available labels is
+not grounds for unstated-relation; choose the better-supported available label.
+```
+
+Compact-tree syntax example only:
+```
+(SN-background
+  (text 1)
+  (NS-evaluation-s
+    (SN-cause (text 2) (NN-joint (text 3) (text 4)))
+    (NS-cause (text 5) (text 6))))
+```
+
+Return only the compact tree for this document:
+
+```tsv
+```

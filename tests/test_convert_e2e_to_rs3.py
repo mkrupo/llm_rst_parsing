@@ -46,11 +46,17 @@ class TreeCleanupTests(unittest.TestCase):
 
 
 class ConversionTests(unittest.TestCase):
-    def test_rejects_unknown_record_version_and_scheme_hash(self):
+    def test_accepts_current_and_previous_versions_and_rejects_unknown_version(self):
         scheme = load_scheme(ROOT / "configs" / "schemes" / "pcc.yaml")
+        _validate_scheme_provenance(
+            {"record_version": 1, "scheme": scheme.metadata()}, scheme
+        )
+        _validate_scheme_provenance(
+            {"record_version": 2, "scheme": scheme.metadata()}, scheme
+        )
         with self.assertRaisesRegex(ValueError, "record version"):
             _validate_scheme_provenance(
-                {"record_version": 2, "scheme": scheme.metadata()}, scheme
+                {"record_version": 3, "scheme": scheme.metadata()}, scheme
             )
         wrong_metadata = scheme.metadata()
         wrong_metadata["sha256"] = "0" * 64

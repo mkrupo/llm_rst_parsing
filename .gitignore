@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+
+# Inference artifacts may contain source text or provider metadata.
+results/predictions/
+results/rs3/*/

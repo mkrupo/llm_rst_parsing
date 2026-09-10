@@ -8,12 +8,25 @@ from types import SimpleNamespace
 from src.run_e2e_icl import (
     Document,
     CompletionResult,
+    ExperimentSummary,
     OpenAIChatClient,
     build_messages,
     inject_tsv,
     read_tsv_documents,
     resolve_prompt,
     run_experiment,
+)
+from src.schemes import Scheme
+
+
+TEST_SCHEME = Scheme(
+    name="test",
+    version="1",
+    description="test scheme",
+    prompt="ICL_test_e2e.txt",
+    relations={"Joint": "multinuc"},
+    sha256="a" * 64,
+    path=pathlib.Path("test.yaml"),
 )
 
 
@@ -63,6 +76,27 @@ class TsvDocumentTests(unittest.TestCase):
             read_tsv_documents(self.write_tsv("doc_id\ttext\n\tFirst.\n"))
         with self.assertRaisesRegex(ValueError, "text"):
             read_tsv_documents(self.write_tsv("doc_id\ttext\nd1\t \n"))
+
+    def test_rejects_bad_or_duplicate_indices_and_unknown_columns(self):
+        with self.assertRaisesRegex(ValueError, "positive canonical integer"):
+            read_tsv_documents(self.write_tsv("doc_id\tindex\ttext\nd1\t01\tFirst.\n"))
+        with self.assertRaisesRegex(ValueError, "duplicate index"):
+            read_tsv_documents(
+                self.write_tsv(
+                    "doc_id\tindex\ttext\nd1\t1\tFirst.\nd1\t1\tSecond.\n"
+                )
+            )
+        with self.assertRaisesRegex(ValueError, "unsupported columns"):
+            read_tsv_documents(
+                self.write_tsv("doc_id\ttext\tgenre\nd1\tFirst.\tnews\n")
+            )
+
+    def test_preserves_edu_text_for_rs3_hydration(self):
+        documents = read_tsv_documents(
+            self.write_tsv("doc_id\ttext\nd1\t  Preserve me.  \n")
+        )
+
+        self.assertEqual(documents[0].rows[0], ("1", "  Preserve me.  "))
 
 
 class PromptCompositionTests(unittest.TestCase):
@@ -220,7 +254,7 @@ class RunExperimentTests(unittest.TestCase):
         client = SequencedClient()
         with tempfile.TemporaryDirectory() as temp_dir:
             output = pathlib.Path(temp_dir) / "nested" / "results.jsonl"
-            run_experiment(
+            summary = run_experiment(
                 documents=documents,
                 system_prompt="SYSTEM SECRET",
                 icl_prompt="USER SECRET\n```tsv\n```\n",
@@ -231,14 +265,24 @@ class RunExperimentTests(unittest.TestCase):
                 endpoint="http://localhost:8000/v1",
                 temperature=0.0,
                 max_tokens=4096,
+                scheme=TEST_SCHEME,
             )
             serialized = output.read_text(encoding="utf-8")
 
         records = [__import__("json").loads(line) for line in serialized.splitlines()]
+        self.assertEqual(summary, ExperimentSummary(succeeded=2, failed=1))
         self.assertEqual(len(records), 3)
+        self.assertEqual(records[0]["record_version"], 1)
         self.assertEqual(records[0]["prompt_name"], "ICL_rstweb_algo_e2e.txt")
         self.assertEqual(records[0]["status"], "ok")
         self.assertEqual(records[0]["raw_tree"], "(NN-Joint (text 1) (text 2))")
+        self.assertEqual(records[0]["scheme"], TEST_SCHEME.metadata())
+        self.assertEqual(records[0]["edus"], [{"index": "1", "text": "First."}])
+        self.assertEqual(len(records[0]["prompt_sha256"]), 64)
+        self.assertEqual(len(records[0]["system_prompt_sha256"]), 64)
+        self.assertEqual(
+            records[0]["decoding"], {"temperature": 0.0, "max_tokens": 4096}
+        )
         self.assertEqual(records[0]["response"]["id"], "r1")
         self.assertIsNone(records[0]["error"])
         self.assertEqual(records[1]["status"], "error")
@@ -266,6 +310,7 @@ class CliHelpTests(unittest.TestCase):
             "--endpoint",
             "--model",
             "--prompt",
+            "--scheme",
             "OPENAI_API_KEY",
             "prompt_name",
             "excludes prompt bodies",
@@ -273,15 +318,14 @@ class CliHelpTests(unittest.TestCase):
             self.assertIn(expected, result.stdout)
 
     def test_converter_help_documents_inputs_outputs_and_report(self):
-        interpreter = "/home/daniiligantev/miniconda3/envs/rstenv/bin/python"
         result = subprocess.run(
-            [interpreter, "-m", "src.convert_e2e_to_rs3", "--help"],
+            [sys.executable, "-m", "src.convert_e2e_to_rs3", "--help"],
             check=True,
             capture_output=True,
             text=True,
         )
 
-        for expected in ("--input", "--output-dir", "--report"):
+        for expected in ("--input", "--output-dir", "--scheme", "--report"):
             self.assertIn(expected, result.stdout)
 
 

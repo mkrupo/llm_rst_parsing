@@ -1,8 +1,10 @@
+-r requirements-e2e.lock
+
+# Additional dependencies for the legacy pairwise/Hugging Face benchmark.
 torch
 transformers
 accelerate
 datasets
-pyyaml
 pandas
 numpy
 scipy
@@ -10,8 +12,4 @@ scikit-learn
 krippendorff
 tqdm
 matplotlib
-openai
-nltk
-rstconverter
-git+https://github.com/tkutschbach/RST-Tace.git
-git+https://github.com/ruthenian8/rst-converter-service.git
+git+https://github.com/tkutschbach/RST-Tace.git@00ab7e5dae50cb2402a1b2d9e9f38b50c1c82e78#egg=rsttace

@@ -1,5 +1,9 @@
 # OpenAI E2E ICL Parsing and RSTWeb Prompts Design
 
+> Historical design record (2026-07-20). It describes the original prototype,
+> including the retired `rstconverter` path. The maintained contract is
+> `docs/inference-contract.md`; `AGENTS.md` defines current repository rules.
+
 ## Goal
 
 Add reproducible end-to-end RST parsing experiments that send TSV documents to an OpenAI-compatible Chat Completions endpoint, use the repository system prompt with a selected ICL prompt, store prompt-free JSONL results, provide RSTWeb prompt counterparts in the PCC formatting style, and convert successful bracketed trees to RS3 for verification.

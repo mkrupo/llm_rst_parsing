@@ -1,4 +1,21 @@
-You are an expert annotator. Based on the definitions, analyze the target text (tsv-formatted) and build a bracketed discourse tree end-to-end. Refer to text fragments by their index. Ensure the correct formatting of the tree.
+Analyze the target TSV document and return one complete compact discourse tree.
+Refer to text fragments only by their index.
+
+OUTPUT CONTRACT:
+- Return exactly one tree and no other text or Markdown.
+- Each leaf must have the form `(text INDEX)`.
+- Use every input index exactly once, in the same left-to-right order as the TSV.
+- Do not alter the supplied segmentation.
+- A mononuclear node is `(NS-RELATION LEFT RIGHT)` or `(SN-RELATION LEFT RIGHT)`;
+  the two letters give the nuclearity of the left and right child respectively.
+- A multinuclear node is `(NN-RELATION CHILD CHILD ...)` and has at least two children.
+- Use `NN` only with a multinuclear relation and `NS` or `SN` only with an RST relation.
+- Relation identifiers are case-sensitive. Use only these exact identifiers:
+  attribution, background, antithesis, concession, evidence, reason, reason-n,
+  justify, evaluation-s, evaluation-n, motivation, enablement, circumstance,
+  condition, otherwise, unless, elaboration, e-elaboration, interpretation,
+  means, cause, result, purpose, solutionhood, preparation, restatement, summary,
+  same-unit, contrast, sequence, list, conjunction, joint.
 
 ```text
 PRECHECK:
@@ -13,6 +30,11 @@ If both spans remain independently functional and equally central,
     treat the relation as MULTINUCLEAR.
 
 Use relation definitions to validate nuclearity.
+```
+
+```text
+If discontinuous fragments are parts of one interrupted EDU, then
+    assign same-unit to the fragments that form that EDU
 ```
 
 ```text
@@ -45,6 +67,12 @@ test primarily pragmatic relations before semantic ones.
 ```
 
 ```text
+If one span is the source of reported speech, thought, perception, or feeling
+and the other span is its attributed content, then
+    assign attribution
+```
+
+```text
 If S makes it easier for R to understand N, especially by providing necessary
 prior/topic information, then
     assign background
@@ -63,7 +91,7 @@ Else if the relation is adversative, contrastive, or expectation-violating, then
 ```text
 Else if S supports a subjective claim, thesis, or evaluation in N, then
     if S is presented as objective fact, observation, or acceptable evidence
-        assign contrast
+        assign evidence
     else if S is also a subjective claim/thesis by W
         assign reason
     else if S supports W’s right to present N or gives a basic justificatory stance
@@ -73,15 +101,15 @@ Else if S supports a subjective claim, thesis, or evaluation in N, then
 ```text
 Else if the support relation runs in the other direction,
 and the omission test shows that the supporting/reason-giving span is more nuclear,
-    assign reason-N
+    assign reason-n
 ```
 
 ```text
 Else if one span evaluates the other from W’s perspective, then
     if the evaluation is omissible and the evaluated material remains central
-        assign evaluation-S
+        assign evaluation-s
     else if the evaluation is the central point and the evaluated material is supporting
-        assign evaluation-N
+        assign evaluation-n
 ```
 
 ```text
@@ -162,12 +190,14 @@ Else
 
 bracketed tree example:
 ```
-(SN-evaluation
+(SN-background
         (text 1)
-        (NS-evaluation
+        (NS-evaluation-s
           (SN-cause (text 2) (NN-joint (text 3) (text 4)))
           (NS-cause (text 5) (text 6))))
 ```
+
+Return only the compact tree for this document:
 
 ```tsv
 ```

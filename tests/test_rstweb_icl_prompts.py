@@ -38,8 +38,8 @@ class RstwebIclPromptTests(unittest.TestCase):
     def test_prompts_exclude_pcc_only_labels(self):
         for name in RSTWEB_PROMPTS:
             with self.subTest(name=name):
-                content = (PROMPTS / name).read_text(encoding="utf-8")
-                for forbidden in ("Conjunction", "E-Elaboration", "Reason-N", "Unless"):
+                content = (PROMPTS / name).read_text(encoding="utf-8").casefold()
+                for forbidden in ("e-elaboration", "reason-n", "evaluation-n", "evaluation-s"):
                     self.assertNotIn(forbidden, content)
 
     def test_prompts_cover_rstweb_inventory(self):
@@ -53,9 +53,15 @@ class RstwebIclPromptTests(unittest.TestCase):
         )
         for name in RSTWEB_PROMPTS:
             content = (PROMPTS / name).read_text(encoding="utf-8")
+            normalized_content = "".join(
+                character for character in content.casefold() if character.isalnum()
+            )
             with self.subTest(name=name):
                 for relation in required:
-                    self.assertIn(relation, content)
+                    normalized_relation = "".join(
+                        character for character in relation.casefold() if character.isalnum()
+                    )
+                    self.assertIn(normalized_relation, normalized_content)
 
 
 if __name__ == "__main__":

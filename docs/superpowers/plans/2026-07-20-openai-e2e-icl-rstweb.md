@@ -1,5 +1,9 @@
 # OpenAI E2E ICL Parsing and RSTWeb Prompts Implementation Plan
 
+> Historical implementation plan (2026-07-20), retained for provenance rather
+> than current instructions. See `docs/inference-contract.md` and `AGENTS.md`
+> for the supported scheme-driven pipeline.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Run document-level RST ICL parsing through an adjustable OpenAI-compatible endpoint, add RSTWeb prompt counterparts, and convert result trees to RS3.

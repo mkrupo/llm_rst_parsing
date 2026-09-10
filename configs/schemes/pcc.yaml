@@ -1,0 +1,40 @@
+name: pcc
+version: 1
+description: >-
+  PCC-oriented starter profile for short, pre-segmented documents. Relation
+  identifiers are the exact case-sensitive labels used in compact trees and RS3.
+prompt: ICL_pcc_algo_e2e.txt
+relations:
+  attribution: rst
+  background: rst
+  antithesis: rst
+  concession: rst
+  evidence: rst
+  reason: rst
+  reason-n: rst
+  justify: rst
+  evaluation-s: rst
+  evaluation-n: rst
+  motivation: rst
+  enablement: rst
+  circumstance: rst
+  condition: rst
+  otherwise: rst
+  unless: rst
+  elaboration: rst
+  e-elaboration: rst
+  interpretation: rst
+  means: rst
+  cause: rst
+  result: rst
+  purpose: rst
+  solutionhood: rst
+  preparation: rst
+  restatement: rst
+  summary: rst
+  same-unit: multinuc
+  contrast: multinuc
+  sequence: multinuc
+  list: multinuc
+  conjunction: multinuc
+  joint: multinuc

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import io
 import json
 import os
@@ -12,6 +13,8 @@ import re
 from collections import OrderedDict
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple
+
+from .schemes import Scheme, load_scheme
 
 
 _ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -40,6 +43,14 @@ class CompletionResult:
     response_id: Optional[str]
     finish_reason: Optional[str]
     usage: Dict[str, Optional[int]]
+
+
+@dataclass(frozen=True)
+class ExperimentSummary:
+    """Counts of API-level document outcomes."""
+
+    succeeded: int
+    failed: int
 
 
 class OpenAIChatClient:
@@ -107,25 +118,43 @@ def read_tsv_documents(path: pathlib.Path) -> List[Document]:
             raise ValueError("TSV input must contain a doc_id column")
         if "text" not in reader.fieldnames:
             raise ValueError("TSV input must contain a text column")
+        if len(set(reader.fieldnames)) != len(reader.fieldnames):
+            raise ValueError("TSV input contains duplicate column names")
+        unexpected = set(reader.fieldnames) - {"doc_id", "index", "text"}
+        if unexpected:
+            raise ValueError(f"TSV input contains unsupported columns: {sorted(unexpected)}")
 
-        source_header = tuple(name for name in reader.fieldnames if name != "doc_id")
-        has_index = "index" in source_header
-        output_header = source_header if has_index else ("index",) + source_header
+        has_index = "index" in reader.fieldnames
+        output_header = ("index", "text")
         grouped: Dict[str, List[Tuple[str, ...]]] = OrderedDict()
+        seen_indices: Dict[str, set[str]] = {}
 
         for line_number, row in enumerate(reader, start=2):
             doc_id = (row.get("doc_id") or "").strip()
-            text = (row.get("text") or "").strip()
+            text = row.get("text") or ""
             if not doc_id:
                 raise ValueError(f"blank doc_id on TSV line {line_number}")
-            if not text:
+            if not text.strip():
                 raise ValueError(f"blank text on TSV line {line_number}")
 
             document_rows = grouped.setdefault(doc_id, [])
-            values = tuple((row.get(name) or "").strip() for name in source_header)
-            if not has_index:
-                values = (str(len(document_rows) + 1),) + values
-            document_rows.append(values)
+            index = (
+                (row.get("index") or "").strip()
+                if has_index
+                else str(len(document_rows) + 1)
+            )
+            if not re.fullmatch(r"[1-9][0-9]*", index):
+                raise ValueError(
+                    f"index must be a positive canonical integer on TSV line {line_number}"
+                )
+            document_indices = seen_indices.setdefault(doc_id, set())
+            if index in document_indices:
+                raise ValueError(
+                    f"duplicate index {index!r} for document {doc_id!r} "
+                    f"on TSV line {line_number}"
+                )
+            document_indices.add(index)
+            document_rows.append((index, text))
 
     if not grouped:
         raise ValueError(f"TSV input contains no document rows: {path}")
@@ -140,8 +169,8 @@ def resolve_prompt(path_or_name: str, prompt_dir: pathlib.Path) -> pathlib.Path:
     """Resolve an ICL prompt path directly or relative to ``prompt_dir``."""
     supplied = pathlib.Path(path_or_name)
     path = supplied if supplied.is_file() else prompt_dir / path_or_name
-    if not re.fullmatch(r"ICL_.+\.txt", path.name):
-        raise ValueError("prompt filename must match ICL_*.txt")
+    if not re.fullmatch(r"ICL_.+_e2e\.txt", path.name):
+        raise ValueError("prompt filename must match ICL_*_e2e.txt")
     if not path.is_file():
         raise FileNotFoundError(f"ICL prompt not found: {path}")
     return path
@@ -184,17 +213,33 @@ def run_experiment(
     endpoint: str,
     temperature: float,
     max_tokens: int,
-) -> None:
+    scheme: Scheme,
+) -> ExperimentSummary:
     """Run each document independently and persist one prompt-free JSON record."""
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    with output_path.open("a", encoding="utf-8") as output:
+    prompt_sha256 = hashlib.sha256(icl_prompt.encode("utf-8")).hexdigest()
+    system_prompt_sha256 = hashlib.sha256(system_prompt.encode("utf-8")).hexdigest()
+    counts = {"succeeded": 0, "failed": 0}
+    with output_path.open("x", encoding="utf-8") as output:
         for document in documents:
             messages = build_messages(system_prompt, inject_tsv(icl_prompt, document))
             base_record: Dict[str, Any] = {
+                "record_version": 1,
                 "doc_id": document.doc_id,
                 "prompt_name": prompt_name,
                 "model": model,
                 "endpoint": endpoint,
+                "scheme": scheme.metadata(),
+                "prompt_sha256": prompt_sha256,
+                "system_prompt_sha256": system_prompt_sha256,
+                "decoding": {
+                    "temperature": temperature,
+                    "max_tokens": max_tokens,
+                },
+                "edus": [
+                    {"index": index, "text": text}
+                    for index, text in document.rows
+                ],
             }
             try:
                 result = client.complete(
@@ -203,6 +248,10 @@ def run_experiment(
                     temperature=temperature,
                     max_tokens=max_tokens,
                 )
+                if result.finish_reason not in (None, "stop"):
+                    raise RuntimeError(
+                        f"completion did not finish normally: {result.finish_reason}"
+                    )
                 record = {
                     **base_record,
                     "status": "ok",
@@ -214,6 +263,7 @@ def run_experiment(
                     },
                     "error": None,
                 }
+                counts["succeeded"] += 1
             except Exception as exc:
                 record = {
                     **base_record,
@@ -222,8 +272,10 @@ def run_experiment(
                     "response": None,
                     "error": {"type": type(exc).__name__, "message": str(exc)},
                 }
+                counts["failed"] += 1
             output.write(json.dumps(record, ensure_ascii=False) + "\n")
             output.flush()
+    return ExperimentSummary(**counts)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -236,7 +288,15 @@ def build_parser() -> argparse.ArgumentParser:
         )
     )
     parser.add_argument("--input", required=True, help="Header-bearing document TSV")
-    parser.add_argument("--prompt", required=True, help="ICL_*.txt path or filename")
+    parser.add_argument(
+        "--scheme",
+        required=True,
+        help="Versioned YAML relation inventory and default prompt",
+    )
+    parser.add_argument(
+        "--prompt",
+        help="Optional ICL_*_e2e.txt override (default: prompt from --scheme)",
+    )
     parser.add_argument("--output", required=True, help="Destination JSONL path")
     parser.add_argument("--model", required=True, help="API model identifier")
     parser.add_argument("--endpoint", required=True, help="OpenAI-compatible base URL")
@@ -259,7 +319,8 @@ def main(argv: Optional[List[str]] = None) -> int:
         raise SystemExit("OPENAI_API_KEY is required")
 
     input_path = pathlib.Path(args.input)
-    prompt_path = resolve_prompt(args.prompt, _ROOT / "prompts")
+    scheme = load_scheme(pathlib.Path(args.scheme))
+    prompt_path = resolve_prompt(args.prompt or scheme.prompt, _ROOT / "prompts")
     system_path = pathlib.Path(args.system_prompt)
     documents = read_tsv_documents(input_path)
     icl_prompt = prompt_path.read_text(encoding="utf-8")
@@ -270,7 +331,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     inject_tsv(icl_prompt, documents[0])
 
     client = OpenAIChatClient(args.endpoint, api_key, args.timeout)
-    run_experiment(
+    summary = run_experiment(
         documents=documents,
         system_prompt=system_prompt,
         icl_prompt=icl_prompt,
@@ -281,8 +342,10 @@ def main(argv: Optional[List[str]] = None) -> int:
         endpoint=args.endpoint,
         temperature=args.temperature,
         max_tokens=args.max_tokens,
+        scheme=scheme,
     )
-    return 0
+    print(f"succeeded={summary.succeeded} failed={summary.failed}")
+    return 1 if summary.failed else 0
 
 
 if __name__ == "__main__":

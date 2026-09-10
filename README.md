@@ -275,8 +275,8 @@ Relation identifiers cannot contain spaces; use a stable slug such as
 `causal-result`. See `docs/inference-contract.md` for design rationale,
 invariants, provenance, and versioning rules.
 
-The evidence audit and unresolved decisions for the current ArgMicrotexts
-adaptation are recorded in `docs/argmicrotexts-project-profile.md`.
+The evidence audit and current decisions for the ArgMicrotexts adaptation are
+recorded in `docs/argmicrotexts-project-profile.md`.
 
 ## Test
 
@@ -289,7 +289,28 @@ python -m unittest discover -s tests -v
 RS3 serialization uses the standard library and is exercised on every test run;
 it does not depend on a colleague-specific environment or external converter.
 
-## Optional Tree Evaluation
+## Normalize Trees For Evaluation
+
+ArgMicrotexts gold can encode several satellites on one nucleus as a flat RS3
+schema. Create derived, canonical files with binary mononuclear attachments
+before using an evaluator that requires them:
+
+```bash
+python -m src.normalize_rs3 \
+  data/input/microtexts_nosameunit_subset \
+  results/normalized/gold
+
+python -m src.normalize_rs3 \
+  results/rs3/argmicrotexts_terra_medium_smoke \
+  results/normalized/predictions
+```
+
+This inserts only structural `span` groups. It does not alter EDU text,
+relation labels, or nuclearity and never modifies the source files. See
+[`docs/rs3-normalization.md`](docs/rs3-normalization.md) for the algorithm,
+provenance, validation rules, and reporting implications.
+
+## Optional RST-Tace Interoperability
 
 `requirements.txt` includes RST-Tace for comparing RS3 trees.
 
@@ -317,11 +338,10 @@ rsttace compare \
   -o results/rsttace/
 ```
 
-Evaluator compatibility must be checked on the chosen gold corpus before a
-full run. In particular, RST-Tace rejects original ArgMicrotexts trees that
-attach multiple mononuclear satellites directly to one nucleus. Such trees
-need a documented normalization or a different evaluator; do not silently
-rewrite gold files merely to satisfy a scoring tool.
+Run RST-Tace on the derived normalized directories, not the original
+ArgMicrotexts gold. RST-Tace rejects source trees that attach multiple
+mononuclear satellites directly to one nucleus. Normalization is a documented
+representation step; it must not change genuine human/model differences.
 
 ## Data
 

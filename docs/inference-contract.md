@@ -130,7 +130,7 @@ retain their own prompt hash even if the scheme version is unchanged.
 
 ## Verification baseline
 
-On 2026-09-10 the network-free suite completed 40 tests under CPython 3.12,
+On 2026-09-10 the network-free suite completed 55 tests under CPython 3.12,
 including a full fake-completion -> JSONL -> RS3 path. A nested generated RS3
 tree was also parsed successfully by RST-Tace at the revision pinned in
 `requirements.txt`; its analysis recovered the expected `elaboration` and
@@ -145,6 +145,7 @@ separately maintained English gold `.edus` exports for all 112 documents.
 
 RST-Tace does not accept every original ArgMicrotexts tree: it rejects source
 files with multiple mononuclear satellites attached directly to one nucleus.
-Gold/prediction scoring therefore requires an explicit, tested normalization
-policy or another evaluator; successful RS3-to-TSV preprocessing alone does
-not settle that evaluation choice.
+The project therefore applies the deterministic, semantics-preserving policy
+documented in `docs/rs3-normalization.md` to independently derived gold and
+prediction copies before evaluation. This resolves serialization compatibility
+but does not itself define or calculate evaluation metrics.

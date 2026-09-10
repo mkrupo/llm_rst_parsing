@@ -1,8 +1,9 @@
 # ArgMicrotexts inference profile: evidence and open decisions
 
 Status: runnable English zero-shot profile. The no-`sameunit` segmentation
-policy and 34-relation release-compatible inventory are fixed in version 1;
-the evaluation normalization remains to be implemented.
+policy and 34-relation release-compatible inventory are fixed in version 1.
+The multi-satellite evaluation normalization is implemented and documented;
+aggregate metric computation remains to be implemented.
 
 ## Intended workflow
 
@@ -126,22 +127,32 @@ project prompt and scheme should omit `sameunit` on the basis of that declared
 segmentation policy, not because the relation happens to be absent from these
 14 gold trees.
 
-## Evaluation issue
+## Evaluation normalization decision
 
 RST-Tace parsed a simple source document (`micro_b001`) but rejected tested
 multi-satellite documents (`micro_b022` and `micro_b045`) with `Multiple mono
 nuclear relations for single element`. This affects many source files and must
 not be mistaken for a preprocessing or XML-validity failure.
 
-Before scoring, choose and test one explicit policy:
+The project adopts the author's existing deterministic normalizer from
+`sfb_retreat_26/rst-qud-comparison/normalize_rs3.py`, imported from Git commit
+`aeff129def1cde9aa94655be772c9da8432a963a`. It attaches left satellites nearest
+to farthest, then right satellites nearest to farthest, inserting only the
+span groups required for binary mononuclear structure. The algorithm preserves
+EDU text/order, relation labels, nuclearity, existing IDs, and relation-header
+declarations. See `docs/rs3-normalization.md`.
 
-1. normalize both gold and predictions to the same binary constituent
-   representation, preferably matching the documented `rst-converter-service`
-   algorithm; or
-2. use an evaluator that directly supports rstWeb multi-satellite schemas.
+Strict normalization succeeded for all 14 pilot documents and all 112 public
+English ArgMicrotexts documents. Thirty-nine of the 112 documents required 44
+derived span groups. Gold and predictions are normalized independently with
+the same function; original files remain unchanged. Normalization must never
+relabel or otherwise correct a prediction before scoring.
 
-The original gold files must remain unchanged whichever evaluation view is
-chosen.
+The normalizer intentionally leaves n-ary multinuclear cores unchanged. None
+of the 14 pilot documents has a multinuclear core wider than two, so the pilot
+requires no additional convention. Thirteen documents in the full 112-file
+corpus each contain one three-nucleus `list`; full-corpus evaluation must state
+whether those are evaluated natively or deterministically binarized.
 
 ## Version 1 prompt decisions
 
@@ -157,7 +168,6 @@ chosen.
   syntax-only compact-tree example, but no gold input/output demonstration;
 - test exact prompt/profile label and relation-type agreement.
 
-The remaining project decision is which binary normalization or alternative
-evaluator is authoritative for scoring multi-satellite gold structures. Any
+Aggregate metric definitions and output format remain to be implemented. Any
 future few-shot experiment must also define a held-out split before selecting
 worked corpus examples.

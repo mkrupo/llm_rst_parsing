@@ -6,6 +6,10 @@ __pycache__/
 # Non-public input data for inference
 data/input
 
+# Reproducible local preprocessing artifacts
+data/processed/*_smoke.tsv*
+
 # Inference artifacts may contain source text or provider metadata.
 results/predictions/
 results/rs3/*/
+results/normalized/
